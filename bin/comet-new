@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'fileutils'
+
+@build_path     = ".comet-build"
+@comet_src_path = "#{@build_path}/vendor/comet"
+@project_dir    = "./"
+@project_name   = "project-name"
+
+OptionParser.new do |opts|
+  opts.on "-p PATH", "--project-path=PATH" do |v| @project_dir = v end
+  opts.on "-n NAME", "--name"              do |v| @project_name = v end
+end.parse!
+
+@build_path  = File.expand_path @build_path
+@project_dir = File.expand_path @project_dir
+
+FileUtils.mkdir_p @comet_src_path
+
+gemspec    = Gem::Specification.find_all_by_name("comet-cpp").first
+vendor_dir = File.expand_path "#{gemspec.bin_dir}/../vendor"
+src_dir    = vendor_dir + "/src"
+app_dir    = vendor_dir + "/app"
+
+def initialize_directory src_dir, output_dir, override
+  Dir["#{src_dir}/**/*"].each do |filepath|
+    next if File.directory? filepath
+    relative_path = filepath[src_dir.length + 1..-1]
+    dest_path     = output_dir + '/' + relative_path
+    FileUtils.mkdir_p(File.dirname dest_path)
+    if !File.exists?(dest_path) || override
+      FileUtils.cp filepath, dest_path
+    end
+  end
+end
+
+initialize_directory src_dir, @comet_src_path, true
+initialize_directory app_dir, "#{@project_dir}/app", false
+
+File.open "#{@project_dir}/CMakeLists.txt", "w" do |file|
+  relative_build_path = Pathname.new(@build_path).relative_path_from(Pathname.new(@project_dir)).to_s
+  file.write <<EOF
+cmake_minimum_required(VERSION 3.0)
+
+project(#{@project_name})
+include_directories(#{relative_build_path}/vendor comet-elements)
+
+if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -cheerp-sourcemap=application.js.map -cheerp-sourcemap-standalone")
+endif()
+
+file(GLOB_RECURSE comet_src #{relative_build_path}/vendor/*.cpp)
+file(GLOB_RECURSE app_src app/*.cpp comet-elements/*.cpp)
+
+add_executable(application ${comet_src} ${app_src})
+EOF
+end unless File.exists? "#{@project_dir}CMakeLists.txt"

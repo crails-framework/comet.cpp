@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'pathname'
+require 'fileutils'
+require 'pty'
+
+@cheerp_path     = "/opt/cheerp"
+@build_type      = "RELEASE"
+@build_path      = ".comet-build"
+@cmakelists_path = "./"
+@output_path     = "public"
+
+OptionParser.new do |opts|
+  opts.on "-c PATH", "--cheerp-path=PATH" do |v| @cheerp_path = v end
+  opts.on "-g", "--debug"                 do |v| @build_type = "DEBUG" end
+  opts.on "-i PATH", "--cmakelists=PATH"  do |v| @cmakelists_path = v end
+  opts.on "-o PATH", "--output=PATH"      do |v| @output_path = v end
+end.parse!
+
+@cmakelists_path = File.expand_path @cmakelists_path
+@output_path     = File.expand_path @output_path
+@build_path      = File.expand_path @build_path
+@cheerp_path     = File.expand_path @cheerp_path
+
+cmake_options = []
+cmake_options << "-DCMAKE_TOOLCHAIN_FILE=#{@cheerp_path}/share/cmake/Modules/CheerpToolchain.cmake"
+cmake_options << "-DCMAKE_BUILD_TYPE=#{@build_type}"
+
+def run_command cmd
+  puts "+ #{cmd}"
+  PTY.spawn(cmd) do |stdout,stdin,pid|
+    begin
+      stdout.each {|line| print line}
+    rescue Errno::EIO
+    end
+    Process.wait(pid)
+  end
+  exit -1 unless $?.success?
+end
+
+FileUtils.mkdir_p @build_path
+
+Dir.chdir @build_path do
+  run_command "cmake #{cmake_options.join ' '} #{@cmakelists_path}"
+  run_command "make"
+end
+
+FileUtils.mkdir_p @output_path
+Dir["#{@build_path}/*.{js,js.map}"].each do |target|
+  path = Pathname.new target
+  basename = path.basename
+  FileUtils.mv target, "#{@output_path}/#{@basename}"
+end

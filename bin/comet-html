@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'fileutils'
+require 'json'
+require 'comet-html/generator'
+
+@source_path = "app"
+@output_path = "comet-elements/html"
+@config_path = "config/comet.json"
+
+OptionParser.new do |opts|
+  opts.on "-i PATH", "--source-path=PATH" do |v| @source_path = v end
+  opts.on "-o PATH", "--output=PATH"      do |v| @output_path = v end
+  opts.on "-c PATH", "--config=PATH"      do |v| @config_path = v end
+end.parse!
+
+@source_path = File.expand_path(@source_path)
+@output_path = File.expand_path(@output_path)
+@config_path = File.expand_path(@config_path)
+
+def purge_old_files whitelist
+  Dir["#{@output_path}/**/*"].each do |file|
+    next if File.directory? file
+    File.delete file unless whitelist.include? file
+  end
+end
+
+def write_if_content_changed file, content
+  if !File.exists?(file) || File.read(file) != content
+    File.open file, 'w' do |f| f.write content end
+    puts "[comet] Generated #{file}"
+  end
+end
+
+files   = Dir["#{@source_path}**/*.html"]
+config  = if File.exists?(@config_path) then JSON.parse(File.read @config_path) else nil end
+success = true
+current_filename = nil
+
+begin
+  generated_files = []
+  files.each do |file|
+    current_filename = file
+    generator = ::Comet::Generator.new @output_path, @source_path, file
+    generator.set_config config unless config.nil?
+    header_file = generator.compiled_header_path
+    source_file = generator.compiled_source_path
+
+    FileUtils.mkdir_p File.dirname(header_file)
+    code = generator.generate
+    write_if_content_changed header_file, code[:header]
+    write_if_content_changed source_file, code[:source]
+    generated_files << header_file << source_file
+  rescue ::Comet::ParseError => e
+    STDERR.puts "[comet] parse error at #{current_filename}:#{e.line}: #{e.message}"
+    success = false
+  rescue ::Comet::HtmlParseError => e
+    STDERR.puts "[comet] parse error at #{current_filename}:#{e.message}"
+    success = false
+  rescue ::Comet::LoadError => e
+    STDERR.puts "[comet] #{e.message}"
+    success = false
+  rescue StandardError => e
+    STDERR.puts e.message
+    e.backtrace.each do |line| STDERR.puts line end
+    success = false
+  end
+  purge_old_files generated_files
+end
