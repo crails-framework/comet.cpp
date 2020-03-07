@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+require 'optparse'
+
+@output_path = "public"
+
+OptionParser.new do |opts|
+  opts.on "-o PATH", "--output=PATH" do |v| @output_path = v end
+end.parse!
+
+@output_path = File.expand_path @output_path
+
+server = WEBrick::HTTPServer.new Port: 8000, DocumentRoot: @output_path
+trap 'INT' do server.shutdown end
+server.start
