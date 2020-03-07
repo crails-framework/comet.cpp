@@ -1,0 +1,5 @@
+guard 'comet-html' do
+  watch(%r{^app/.+\.html$})
+end
+
+guard 'comet'

@@ -20,7 +20,7 @@ FileUtils.mkdir_p @comet_src_path
 gemspec    = Gem::Specification.find_all_by_name("comet-cpp").first
 vendor_dir = File.expand_path "#{gemspec.bin_dir}/../vendor"
 src_dir    = vendor_dir + "/src"
-app_dir    = vendor_dir + "/app"
+app_dir    = vendor_dir + "/project"
 
 def initialize_directory src_dir, output_dir, override
   Dir["#{src_dir}/**/*"].each do |filepath|
@@ -35,7 +35,7 @@ def initialize_directory src_dir, output_dir, override
 end
 
 initialize_directory src_dir, @comet_src_path, true
-initialize_directory app_dir, "#{@project_dir}/app", false
+initialize_directory app_dir, @project_dir, false
 
 File.open "#{@project_dir}/CMakeLists.txt", "w" do |file|
   relative_build_path = Pathname.new(@build_path).relative_path_from(Pathname.new(@project_dir)).to_s
@@ -54,4 +54,4 @@ file(GLOB_RECURSE app_src app/*.cpp comet-elements/*.cpp)
 
 add_executable(application ${comet_src} ${app_src})
 EOF
-end unless File.exists? "#{@project_dir}CMakeLists.txt"
+end unless File.exists? "#{@project_dir}/CMakeLists.txt"

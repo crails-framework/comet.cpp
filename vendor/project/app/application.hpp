@@ -5,7 +5,6 @@
 
 class Application
 {
-  friend void webMain();
   Application() {}
   Application(const Application&)    = delete;
   void operator=(const Application&) = delete;
