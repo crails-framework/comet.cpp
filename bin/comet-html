@@ -32,7 +32,7 @@ def write_if_content_changed file, content
   end
 end
 
-files   = Dir["#{@source_path}**/*.html"]
+files   = Dir["#{@source_path}/**/*.html"]
 config  = if File.exists?(@config_path) then JSON.parse(File.read @config_path) else nil end
 success = true
 current_filename = nil
