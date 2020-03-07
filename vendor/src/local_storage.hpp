@@ -1,7 +1,7 @@
 #ifndef  FRONT_LOCAL_STORAGE_HPP
 # define FRONT_LOCAL_STORAGE_HPP
 
-# include <boost/lexical_cast.hpp>
+# include "from_string.hpp"
 # include "signal.hpp"
 # include <cheerp/clientlib.h>
 
@@ -26,13 +26,13 @@ namespace Comet
     template<typename T>
     void set_item(const std::string& key, T value)
     {
-      set_item<const std::string&>(key, boost::lexical_cast<std::string>(value));
+      set_item<const std::string&>(key, std::to_string(value));
     }
 
     template<typename T>
     T get_item(const std::string& key) const
     {
-      return boost::lexical_cast<T>(get_item<std::string>(key));
+      return Comet::from_string<T>(get_item<std::string>(key));
     }
 
     void remove_item(const std::string& key);

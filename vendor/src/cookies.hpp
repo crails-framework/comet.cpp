@@ -1,9 +1,10 @@
 #ifndef  CRAILS_FRONT_COOKIES_HPP
 # define CRAILS_FRONT_COOKIES_HPP
 
-# include <boost/lexical_cast.hpp>
+# include "from_string.hpp"
 # include <string>
 # include <map>
+# include <ctime>
 
 namespace Comet
 {
@@ -19,19 +20,19 @@ namespace Comet
     {
       std::string val = get<std::string>(key);
 
-      return boost::lexical_cast<TYPE>(val);
+      return Comet::from_string<TYPE>(val);
     }
 
     template<typename TYPE>
     void set(const std::string& key, const TYPE& val)
     {
-      set(key, boost::lexical_cast<std::string>(val), 0);
+      set(key, std::to_string(val), 0);
     }
 
     template<typename TYPE>
     void set(const std::string& key, const TYPE& val, std::time_t expires_in)
     {
-      set(key, boost::lexical_cast<std::string>(val), expires_in);
+      set(key, std::to_string(val), expires_in);
     }
 
   private:

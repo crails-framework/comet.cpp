@@ -1,6 +1,6 @@
 #include "bindable.hpp"
 #include "globals.hpp"
-#include <boost/lexical_cast.hpp>
+#include "from_string.hpp"
 
 using namespace Comet;
 
@@ -10,7 +10,7 @@ Bindable& Bindable::use_mode(BindMode mode, const std::string& parameter)
   switch (mode)
   {
   case ThrottleBind:
-    throttle_refresh = boost::lexical_cast<unsigned long>(parameter);
+    throttle_refresh = Comet::from_string<unsigned long>(parameter);
     break ;
   case SignalBind:
     signal_name = parameter;
