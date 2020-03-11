@@ -3,17 +3,22 @@ require 'optparse'
 require 'fileutils'
 
 @build_path     = ".comet-build"
-@comet_src_path = "#{@build_path}/vendor/comet"
+@vendor_path    = "#{@build_path}/vendor"
 @project_dir    = "./"
 @project_name   = "project-name"
+@skip_project   = false
 
 OptionParser.new do |opts|
   opts.on "-p PATH", "--project-path=PATH" do |v| @project_dir = v end
-  opts.on "-n NAME", "--name"              do |v| @project_name = v end
+  opts.on "-n NAME", "--name=NAME"         do |v| @project_name = v end
+  opts.on "-v PATH", "--vendor-path=PATH"  do |v| @vendor_path = v end
+  opts.on "-z", "--skip-project-files"     do |v| @skip_project = v end
 end.parse!
 
-@build_path  = File.expand_path @build_path
-@project_dir = File.expand_path @project_dir
+@build_path     = File.expand_path @build_path
+@project_dir    = File.expand_path @project_dir
+@vendor_path    = File.expand_path @vendor_path
+@comet_src_path = "#{@vendor_path}/comet"
 
 FileUtils.mkdir_p @comet_src_path
 
@@ -35,23 +40,23 @@ def initialize_directory src_dir, output_dir, override
 end
 
 initialize_directory src_dir, @comet_src_path, true
-initialize_directory app_dir, @project_dir, false
+initialize_directory app_dir, @project_dir, false unless @skip_project
 
 File.open "#{@project_dir}/CMakeLists.txt", "w" do |file|
-  relative_build_path = Pathname.new(@build_path).relative_path_from(Pathname.new(@project_dir)).to_s
+  relative_vendor_path = Pathname.new(@vendor_path).relative_path_from(Pathname.new(@project_dir)).to_s
   file.write <<EOF
 cmake_minimum_required(VERSION 3.0)
 
 project(#{@project_name})
-include_directories(#{relative_build_path}/vendor comet-elements)
+include_directories(#{relative_vendor_path} comet-elements)
 
 if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -cheerp-sourcemap=application.js.map -cheerp-sourcemap-standalone")
 endif()
 
-file(GLOB_RECURSE comet_src #{relative_build_path}/vendor/*.cpp)
+file(GLOB_RECURSE vendor_src #{relative_vendor_path}/*.cpp)
 file(GLOB_RECURSE app_src app/*.cpp comet-elements/*.cpp)
 
-add_executable(application ${comet_src} ${app_src})
+add_executable(application ${vendor_src} ${app_src})
 EOF
-end unless File.exists? "#{@project_dir}/CMakeLists.txt"
+end unless @skip_project || (File.exists? "#{@project_dir}/CMakeLists.txt")
