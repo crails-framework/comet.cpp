@@ -144,7 +144,7 @@ namespace Comet
       {
         auto ptr = std::make_shared<MODEL>();
         ptr->from_json(model_json);
-        models.emplace(ptr->get_id(), ptr);
+        Collection<MODEL>::models.emplace(ptr->get_id(), ptr);
         return true;
       });
     }
