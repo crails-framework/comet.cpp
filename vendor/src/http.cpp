@@ -32,6 +32,13 @@ DataTree Response::get_response_data() const
   return tree;
 }
 
+Comet::Object Response::get_response_object() const
+{
+  if (_has_body)
+    Comet::Object::from_json(body);
+  return Comet::Object();
+}
+
 /*
  * Request
  */
