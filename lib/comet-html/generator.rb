@@ -158,7 +158,11 @@ module Comet
       raise HtmlParseError.new fatal_error unless fatal_error.nil?
 
       main_element = Comet::Class.new body
-      main_element.typename = File.basename(@filepath, ".html").to_s.camelize
+      main_element.typename = if html["classname"].nil?
+        File.basename(@filepath, ".html").to_s.camelize
+      else
+        html["classname"]
+      end
       main_element.superclass = html["extends"] unless html["extends"].nil?
       main_element.probe
 
