@@ -29,12 +29,17 @@ namespace Comet
     {
     }
 
+    virtual std::string get_application_name()
+    {
+      return "main";
+    }
+
     template<typename ELEMENT>
     Layout<ELEMENT>& use_layout()
     {
       auto& layout = get_layout<ELEMENT>();
 
-      layout.attach_as_layout();
+      layout.attach_as_layout(get_application_name());
       return layout;
     }
 
