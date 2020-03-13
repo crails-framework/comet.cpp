@@ -84,12 +84,12 @@ void Bindable::throttle_schedule()
 {
   std::shared_ptr<bool> _enabled_ptr = enabled_ptr;
 
-  Comet::window->setTimeout(cheerp::Callback([this, _enabled_ptr]()
+  Comet::window.set_timeout([this, _enabled_ptr]()
   {
     if (*_enabled_ptr)
     {
       update();
       throttle_schedule();
     }
-  }), throttle_refresh);
+  }, throttle_refresh);
 }
