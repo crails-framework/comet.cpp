@@ -15,6 +15,9 @@ namespace Comet
     Signal<void> resized;
 
     Window();
+
+    void set_timeout(std::function<void()>, double interval) const;
+    void set_interval(std::function<void()>, double interval) const;
   };
 }
 
