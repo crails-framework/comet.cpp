@@ -11,6 +11,10 @@ Router::Router()
     on_hash_changed();
   }));
   initialize();
+}
+
+void Router::start()
+{
   document.on_ready([this]() { navigate(get_current_path(), true); });
 }
 

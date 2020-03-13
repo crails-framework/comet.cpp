@@ -21,6 +21,7 @@ namespace Comet
     bool navigate(const std::string& path, bool trigger = true);
 
     void initialize();
+    void start();
     std::string get_current_path() const;
 
   private:
