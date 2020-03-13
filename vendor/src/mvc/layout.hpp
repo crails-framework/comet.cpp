@@ -16,7 +16,6 @@ namespace Comet
       if (candidates.size() > 0)
         return candidates[0];
       return body;
-      //return document->get_body();
     }
 
   public:
