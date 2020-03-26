@@ -208,7 +208,7 @@ namespace HtmlTemplate
 HEADER
 
       source = <<SOURCE
-#include <boost/lexical_cast.hpp>
+#include <comet/lexical_cast.hpp>
 #include "#{compiled_header_path}"
 
 #{source_code}

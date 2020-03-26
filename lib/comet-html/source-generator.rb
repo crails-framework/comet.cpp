@@ -129,7 +129,7 @@ module Comet
         elsif binding.attribute_name == "innerhtml"
           "Comet::Bindable([this]() { #{ref.name}.html(#{binding.code}); })"
         else
-          "Comet::Bindable(#{ref.name}, \"#{binding.attribute_name}\", [this]() -> std::string { return boost::lexical_cast<std::string>(#{binding.code}); })"
+          "Comet::Bindable(#{ref.name}, \"#{binding.attribute_name}\", [this]() -> std::string { return Comet::lexical_cast<std::string>(#{binding.code}); })"
         end
         result += "  bound_attributes.push_back(#{initializer}#{binding.bind_mode});\n"
       end
