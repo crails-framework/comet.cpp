@@ -12,7 +12,7 @@ namespace Comet
     typedef std::pair<Iterator, std::shared_ptr<ELEMENT> > ElementPair;
     typedef std::vector<ElementPair>                       Elements;
     Elements elements;
-    bool use_element_cache = true;
+    bool use_element_cache = false;
 
     template<typename PARENT>
     void refresh(PARENT* parent, const ARRAY& array)
@@ -20,7 +20,7 @@ namespace Comet
       if (use_element_cache)
         purge_removed_elements(array);
       else
-        elements.clear();
+        clear();
       update_elements(parent, array);
       attach_elements();
       trigger_binding_updates();
@@ -36,6 +36,13 @@ namespace Comet
     {
       for (const auto pair : elements)
         pair.second->trigger_binding_updates();
+    }
+
+    void clear()
+    {
+      for (auto element : elements)
+        element.second->destroy();
+      elements.clear();
     }
 
   private:
