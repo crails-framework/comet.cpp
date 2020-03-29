@@ -30,7 +30,7 @@ module ::Guard
         end
         Process.wait(pid)
       end
-      $?.success?
+      if $?.success? then :success else :failure end
     end
   end
 end
