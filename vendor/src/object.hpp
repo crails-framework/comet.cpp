@@ -183,7 +183,7 @@ namespace Comet
     {
       std::string varname = "_comet_arg_0_";
 
-      varname[18] = i;
+      varname[11] = i;
       Object::set_global(varname.c_str(), object);
       return varname;
     }
@@ -260,6 +260,15 @@ namespace Comet
     String(const wchar_t* str)      { ptr = new client::String(str); }
     String(const std::string& str)  { ptr = new client::String(str.c_str()); }
     String(const std::wstring& str) { ptr = new client::String(str.c_str()); }
+  };
+
+  template<>
+  struct ApplyParamsToString<String>
+  {
+    static std::string func(String arg, char i)
+    {
+      return ApplyParamsToString<Object>::func(Object((client::Object*)(*arg)), i);
+    }
   };
 }
 
