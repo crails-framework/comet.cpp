@@ -183,3 +183,9 @@ bool Data::as<bool>() const
   stream >> numerical_value;
   return numerical_value != 0;
 }
+
+template<>
+string Data::as<string>() const
+{
+  return as_object().apply("toString");
+}
