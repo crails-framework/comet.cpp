@@ -270,44 +270,23 @@ void Element::toggle_class(const std::string& str, bool set)
 
 void Element::add_class(const std::string& str)
 {
-  client::String* original = (*this)->getAttribute("class");
-  std::string result;
+  auto* class_list = (*this)->get_classList();
 
-  if (original)
-    result = (std::string)*original;
-  if (result.size() > 0)
-    result += ' ';
-  result += str;
-  (*this)->setAttribute("class", result.c_str());
+  class_list->add(str.c_str());
 }
 
 void Element::remove_class(const std::string& str)
 {
-  client::String* original = (*this)->getAttribute("class");
+  auto* class_list = (*this)->get_classList();
 
-  if (original)
-  {
-    std::string result = (std::string)*original;
-    auto it = result.find(str);
-    if (it > 0)
-      result.erase(it - 1, it + str.size() + 1);
-    else
-      result.erase(it, it + str.size() + 1);
-    (*this)->setAttribute("class", result.c_str());
-  }
+  class_list->remove(str.c_str());
 }
 
 bool Element::has_class(const std::string& str) const
 {
-  client::String* class_ptr = (*this)->getAttribute("class");
+  auto* class_list = (*this)->get_classList();
 
-  if (class_ptr)
-  {
-    std::string classes = (std::string)*class_ptr;
-
-    return classes.find(str) != std::string::npos;
-  }
-  return false;
+  return class_list->contains(str.c_str());
 }
 
 bool Element::has_attribute(const std::string& key) const
