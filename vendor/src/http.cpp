@@ -16,20 +16,14 @@ void Response::initialize(client::XMLHttpRequest* xhr)
   status = xhr->get_status();
   if (xhr->get_responseText())
   {
-    Object object(xhr->get_responseText());
-
     _has_body = true;
-    body      = (std::string)(object);
+    body      = xhr->get_responseText();
   }
 }
 
 DataTree Response::get_response_data() const
 {
-  DataTree tree;
-
-  if (_has_body)
-    tree.from_json(body);
-  return tree;
+  return DataTree(get_response_object());
 }
 
 Comet::Object Response::get_response_object() const

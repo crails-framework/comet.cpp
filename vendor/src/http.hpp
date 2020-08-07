@@ -14,9 +14,9 @@ namespace Comet
     {
       friend class Request;
 
-      bool        _has_body = false;
-      std::string body;
-      double      status = 0;
+      bool            _has_body = false;
+      client::String* body;
+      double          status = 0;
     public:
       Response();
       
@@ -28,7 +28,7 @@ namespace Comet
 
       Comet::Object get_response_object() const;
       DataTree      get_response_data() const;
-      std::string   get_response_text() const { return body; }
+      std::string   get_response_text() const { return std::string(*body); }
     };
 
     class Request
