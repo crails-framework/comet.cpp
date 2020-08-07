@@ -38,3 +38,34 @@ void Object::set_global(const std::string& key, Object object)
 {
   window.set(key, object);
 }
+
+template<>
+vector<wstring> Object::to_vector() const
+{
+  vector<wstring> result;
+
+  if (is_of_type("Array"))
+  {
+    const client::Array& array = *(static_cast<client::Array*>(ptr));
+    result.resize(array.get_length());
+    for (int i = 0 ; i < array.get_length() ; ++i)
+      result.push_back((wstring)(Object(array[i])));
+  }
+  return result;
+}
+
+namespace Comet
+{
+  std::wstring to_wstring(client::String* value)
+  {
+    std::wstring wide_string;
+    auto         length = value->get_length();
+    wchar_t*     result = new wchar_t[length + 1];
+
+    for(int i = 0; i < value->get_length() ; i++)
+      result[i] = (wchar_t)value->charCodeAt(i);
+    wide_string = std::wstring(result, length);
+    delete[] result;
+    return wide_string;
+  }
+}

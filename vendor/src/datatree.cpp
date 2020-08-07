@@ -189,3 +189,10 @@ string Data::as<string>() const
 {
   return as_object().apply("toString");
 }
+
+
+template<>
+wstring Data::as<wstring>() const
+{
+  return as_object().apply("toString");
+}

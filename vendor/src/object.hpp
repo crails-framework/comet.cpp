@@ -21,6 +21,8 @@ namespace Comet
   template<typename ARG>
   struct ApplyParamsToString;
 
+  std::wstring to_wstring(client::String*);
+
   class Object
   {
   protected:
@@ -87,6 +89,13 @@ namespace Comet
       if (!is_of_type("String"))
         __asm__("throw 'Comet::Object cast to std::string, but type is not String'");
       return (std::string)(*static_cast<client::String*>(ptr));
+    }
+
+    operator std::wstring() const
+    {
+      if (!is_of_type("String"))
+        __asm__("throw 'Comet::Object cast to std::string, but type is not String'");
+      return to_wstring(static_cast<client::String*>(ptr));
     }
 
     operator double()      const { return (double)(*ptr); }
@@ -163,6 +172,8 @@ namespace Comet
         + ',' + _apply_params<ARGS...>(i + 1, args...);
     }
   };
+  template<>
+  std::vector<std::wstring> Object::to_vector() const;
 
   template<typename ARG>
   struct ApplyParamsToString
