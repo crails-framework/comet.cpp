@@ -94,7 +94,7 @@ namespace Comet
     operator std::wstring() const
     {
       if (!is_of_type("String"))
-        __asm__("throw 'Comet::Object cast to std::string, but type is not String'");
+        __asm__("throw 'Comet::Object cast to std::wstring, but type is not String'");
       return to_wstring(static_cast<client::String*>(ptr));
     }
 
