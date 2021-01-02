@@ -4,6 +4,18 @@
 using namespace std;
 using namespace Comet;
 
+static std::map<std::string, std::string> display_style_by_tag = {
+  {"div", "block"}, {"tr", "table-row"}, {"td", "table-cell"}, {"th", "table-cell"}, {"table", "table"}
+};
+
+static std::string get_default_display_style_for_tag(const std::string& tag)
+{
+  transform(tag.begin(), tag.end(), [](unsigned char c) { return tolower(c); });
+  if (display_style_by_tag.find(tag) != display_style_by_tag.end())
+    return display_style_by_tag.at(tag);
+   return "inline-block";
+}
+
 static std::vector<std::string> string_split(const std::string& src, char delimiter)
 {
   vector<string> strings;
@@ -52,10 +64,8 @@ Element& Element::visible(bool value, const string& _display)
 
   if (value)
   {
-    string tag = tagName();
-
     if (!_display.length())
-      display = (tag == "DIV" || tag == "div") ? "block" : "inline-block";
+      display = get_default_display_style_for_tag(tagName());
     else
       display = _display;
   }
