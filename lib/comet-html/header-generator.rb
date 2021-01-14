@@ -26,11 +26,20 @@ module Comet
     def generate_getters_setters
       result = ""
       object.refs.each do |ref|
+        is_ptr = ref.type.end_with? '*'
         if ref.has_getter?
-          result += indent + "const #{ref.type}& get_#{ref.name}() const { return #{ref.name}; }\n"
+          if is_ptr
+            result += indent + "#{ref.type} get_#{ref.name}() const { return #{ref.name}; }\n"
+          else
+            result += indent + "const #{ref.type}& get_#{ref.name}() const { return #{ref.name}; }\n"
+          end
         end
         if ref.has_setter?
-          result += indent + "virtual void set_#{ref.name}(const #{ref.type}& __v) { #{ref.name} = __v; }\n"
+          if is_ptr
+            result += indent + "virtual void set_#{ref.name}(#{ref.type} __v) { #{ref.name} = __v; }\n"
+          else
+            result += indent + "virtual void set_#{ref.name}(const #{ref.type}& __v) { #{ref.name} = __v; }\n"
+          end
         end
       end
       result
