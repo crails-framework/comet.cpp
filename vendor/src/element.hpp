@@ -81,6 +81,7 @@ namespace Comet
     Element get_next();
 
     std::vector<Element> find(const std::string& selector);
+    Element              find_one(const std::string& selector);
     bool                 contains(const client::HTMLElement*);
     void                 each(std::function<bool (Element&)>);
 
