@@ -29,12 +29,13 @@ namespace Comet
       Comet::Object get_response_object() const;
       DataTree      get_response_data() const;
       std::string   get_response_text() const { return std::string(*body); }
+      std::wstring  get_response_wide_text() const { return to_wstring(body); }
     };
 
     class Request
     {
       const std::string          method,  path;
-      std::string                body;
+      Comet::String              body;
       std::shared_ptr<Response>  response;
       client::XMLHttpRequest*    xhr;
 
@@ -60,6 +61,8 @@ namespace Comet
 
       void set_headers(const std::map<std::string, std::string> value);
       void set_body(const std::string& value);
+      void set_body(const std::wstring& value);
+      void set_body(Comet::String value);
 
       Comet::Promise send();
     };

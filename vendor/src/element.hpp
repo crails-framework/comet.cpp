@@ -55,6 +55,15 @@ namespace Comet
       return var;
     }
 
+    template<>
+    std::wstring value<std::wstring>()
+    {
+      auto* input_el = static_cast<client::HTMLInputElement*>(**this);
+      auto* client_string = input->el_get_value();
+
+      return to_wstring(client_string);
+    }
+
     inline Element& inner(const std::vector<Element>& els)                  { return operator>(els); }
     inline Element& inner(const std::vector<Element*>& els)                 { return operator>(els); }
     inline Element& inner(const std::vector<std::shared_ptr<Element> > els) { return operator>(els); }

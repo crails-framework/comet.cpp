@@ -51,6 +51,16 @@ void Request::set_headers(const map<string, string> headers)
 
 void Request::set_body(const std::string& value)
 {
+  set_body(Comet::String(value));
+}
+
+void Request::set_body(const std::wstring& value)
+{
+  set_body(Comet::String(value));
+}
+
+void Request::set_body(Comet::String value)
+{
   body = value;
 }
 
@@ -75,12 +85,8 @@ Promise Request::send()
   return Promise([this](function<void()> resolve, function<void()> reject)
   {
     xhr->set_onload(request_on_load(xhr, response, resolve, reject));
-    if (body.length() > 0)
-    {
-      Comet::String js_string(body.c_str());
-
-      xhr->send(*js_string);
-    }
+    if (body->get_length() > 0)
+      xhr->send(*body);
     else
       xhr->send();
   });
