@@ -250,7 +250,8 @@ module Comet
         result += "  #{repeater.repeater_name}.bind_attributes();\n"
       end
       object.slots.each do |slot|
-        result += "  #{slot.slot_ref}.get_element()->bind_attributes();\n"
+        result += "  if (#{slot.slot_ref}.has_element())\n"
+        result += "    #{slot.slot_ref}.get_element()->bind_attributes();\n"
       end
       result += "}\n"
       result
@@ -274,7 +275,8 @@ module Comet
         result += "  #{repeater.repeater_name}.trigger_binding_updates();\n"
       end
       object.slots.each do |slot|
-        result += "  #{slot.slot_ref}.get_element()->trigger_binding_updates();\n"
+        result += "  if (#{slot.slot_ref}.has_element())\n"
+        result += "    #{slot.slot_ref}.get_element()->trigger_binding_updates();\n"
       end
       result += "}\n"
       result
