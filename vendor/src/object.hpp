@@ -52,6 +52,9 @@ namespace Comet
       ptr = array;
     }
 
+    template<typename FUNCTYPE>
+    Object(std::function<FUNCTYPE> func) { ptr = cheerp::Callback(func); }
+
     static Object from_json(client::String* str)
     {
       return client::JSON.parse(str);
@@ -115,9 +118,6 @@ namespace Comet
       return to_vector<T>();
     }
 
-    bool is_of_type(const std::string& type) const { return is_of_type(type.c_str()); }
-    bool is_of_type(const char* type) const;
-
     template<typename T>
     std::vector<T> to_vector() const
     {
@@ -132,6 +132,9 @@ namespace Comet
       }
       return result;
     }
+
+    bool is_of_type(const std::string& type) const { return is_of_type(type.c_str()); }
+    bool is_of_type(const char* type) const;
 
     void set(const std::string& str, Object object)
     {
