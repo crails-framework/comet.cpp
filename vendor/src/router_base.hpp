@@ -75,7 +75,7 @@ namespace Comet
     {
       using namespace std;
       string   find_params_str(':' + std::string(ROUTER_PARAM_PATTERN));
-      JsRegExp find_params(new client::RegExp(find_params_str.c_str()));
+      JsRegExp find_params(new client::RegExp(find_params_str.c_str(), "g"));
       string   regexified_route;
       auto     matches = Comet::Object(
         Comet::String(route)->match(*find_params)
