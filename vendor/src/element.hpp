@@ -59,7 +59,7 @@ namespace Comet
     std::wstring value<std::wstring>()
     {
       auto* input_el = static_cast<client::HTMLInputElement*>(**this);
-      auto* client_string = input->el_get_value();
+      auto* client_string = input_el->get_value();
 
       return to_wstring(client_string);
     }
