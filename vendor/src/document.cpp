@@ -12,7 +12,7 @@ Document::Document() : ObjectImpl(&(client::document)), events(make_shared<Javas
   auto callback = [this]() { on_ready_state_changed(); };
 
   events->on("readystatechange", callback);
-  window.set_timeout(callback, 0);
+  client::window.setTimeout(cheerp::Callback(callback), 0);
 }
 
 Document::ReadyState Document::get_ready_state()
@@ -35,7 +35,7 @@ void Document::on_ready(function<void ()> callback)
     on_ready_callbacks.push_back(callback);
     break ;
   default:
-    window.set_timeout(callback, 0);
+    client::window.setTimeout(cheerp::Callback(callback), 0);
     break ;
   }
 }
