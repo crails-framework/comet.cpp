@@ -130,6 +130,7 @@ module Comet
 #{public_properties_def}
 
       #{object.constructor_decl}
+      virtual ~#{object.typename}() {}
 
       void bind_attributes();
       void trigger_binding_updates();
