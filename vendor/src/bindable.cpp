@@ -59,7 +59,7 @@ void Bindable::disable()
 
 void Bindable::update()
 {
-  if (updater)
+  if (has_updater)
     updater();
   else if (!element.is_undefined())
   {

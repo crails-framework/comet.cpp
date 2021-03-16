@@ -51,6 +51,7 @@ namespace Comet
     Comet::Element element;
     std::string            target;
     Getter                 getter;
+    bool                   has_updater = false;
     std::function<void()>  updater;
 
     std::string            signal_name;
@@ -61,7 +62,7 @@ namespace Comet
   public:
     Bindable() {}
     Bindable(Comet::Element el, const std::string& t, Getter g) : element(el), target(t), getter(g) {}
-    Bindable(std::function<void ()> func) : updater(func) {}
+    Bindable(std::function<void ()> func) : has_updater(true), updater(func) {}
 
     ~Bindable() { disable(); }
 
