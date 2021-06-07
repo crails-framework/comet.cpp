@@ -60,7 +60,11 @@ void Bindable::disable()
 void Bindable::update()
 {
   if (has_updater)
+  {
+    __asm__("try {");
     updater();
+    __asm__("} catch(error) { console.error('[Comet] failed to update Bindable:', error); }");
+  }
   else if (!element.is_undefined())
   {
     if (target == "text")
