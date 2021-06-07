@@ -224,6 +224,8 @@ public:
   DataTree& from_json_file(const std::string&);
   std::string to_json() const;
 
+  Comet::Object as_object() { return tree; }
+
 private:
   Comet::Object tree;
 };
