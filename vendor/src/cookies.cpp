@@ -75,6 +75,7 @@ void Cookies::remove(const string& key)
 void Cookies::update_cookie_map()
 {
   last_cookie_string = get_cookie_string();
+  cookie_store.clear();
   Comet::parse_cookie_values(last_cookie_string,
     [this](const string& key, const string& value) {
     cookie_store.emplace(key, value);
