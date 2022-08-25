@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
     name.match %r{^(bin|lib|vendor)/}
   end
   s.homepage     = 'https://github.com/crails-framework/comet-cpp'
-  s.license      = 'BSD'
+  s.license      = 'BSD-3-Clause'
   s.require_path = 'lib'
   s.bindir       = 'bin'
   s.executables << 'comet-make' << 'comet-html' << 'comet-new'
