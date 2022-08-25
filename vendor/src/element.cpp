@@ -76,6 +76,19 @@ Element& Element::visible(bool value, const string& _display)
   return *this;
 }
 
+bool Element::is_attached() const
+{
+  auto* el = (*this)->get_parentElement();
+
+  while (el)
+  {
+    if (el == client::document.get_body())
+      return true;
+    el = el->get_parentElement();
+  }
+  return false;
+}
+
 bool Element::has_parent() const
 {
   return (*this)->get_parentElement() != 0;

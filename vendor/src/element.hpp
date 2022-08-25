@@ -85,6 +85,7 @@ namespace Comet
     void insert_after(Element& el);
     void destroy();
 
+    bool    is_attached() const;
     bool    has_parent() const;
     Element get_parent();
     Element get_next();
