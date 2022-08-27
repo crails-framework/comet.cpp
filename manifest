@@ -1,0 +1,12 @@
+: 1
+name: comet
+version: 1.0.0
+summary: A C++ web development framework using Cheerp to transpile to JavaScript
+license: BSD-C3 
+description-file: README.md
+url: https://github.com/crails-framework/comet.cpp
+email: michael@unetresgrossebite.com
+depends: * build2 >= 0.15.0
+depends: * bpkg >= 0.15.0
+depends: pugixml ^1.12.1
+depends: { libboost-program-options libboost-json } >= 1.74.0
