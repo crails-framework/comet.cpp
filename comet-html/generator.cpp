@@ -2,11 +2,9 @@
 #include "probe.hpp"
 #include "header_generator.hpp"
 #include <set>
+#include <crails/utils/semantics.hpp>
 
 using namespace std;
-
-std::string dasherize(const std::string& source);
-std::string camelize(const std::string& source, bool lowerCamelCase = false);
 
 void Generator::prepare()
 {
@@ -91,7 +89,7 @@ void Generator::initialize_classname(const pugi::xml_node& node)
   {
     auto filename = Context::global.file_path.filename();
     auto classname = filename.string().substr(0, filename.string().length() - filename.extension().string().length());
-    root->type_name = camelize(classname);
+    root->type_name = Crails::camelize(classname);
   }
   else
     root->type_name = attribute.value();
@@ -134,7 +132,7 @@ void Generator::load_includes()
       string tag_name;
 
       if (tag_attribute.empty())
-        tag_name = dasherize(type); // TODO: replace "::" with "_", remove anything after '<'
+        tag_name = Crails::dasherize(type); // TODO: replace "::" with "_", remove anything after '<'
       else
         tag_name = tag_attribute.value();
       Context::global.element_types.emplace(tag_name, type);

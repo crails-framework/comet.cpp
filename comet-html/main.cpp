@@ -10,6 +10,7 @@
 #include "parse_error.hpp"
 #include <boost/json.hpp>
 #include <boost/program_options.hpp>
+#include <crails/read_file.hpp>
 #include <filesystem>
 
 using namespace std;
@@ -22,7 +23,6 @@ bool is_valid_cpp_variable_name(const std::string& value)
 }
 
 // filesystem.cpp
-bool read_file(const string& filepath, string& out);
 bool write_file(const string& filepath, const string& contents);
 // options.cpp
 boost::program_options::options_description options_description();
@@ -33,7 +33,7 @@ boost::json::object load_config(const std::string& path)
   boost::json::object result;
   std::string         raw_json;
 
-  if (read_file(path, raw_json))
+  if (Crails::read_file(path, raw_json))
     return boost::json::parse(raw_json).as_object();
   return result;
 }
@@ -115,7 +115,7 @@ static int generate_template(const filesystem::path& output_folder, const filesy
 
   try
   {
-    if (read_file(template_path.string(), html))
+    if (Crails::read_file(template_path.string(), html))
     {
       string inline_code = extract_inline_code(html);
       pugi::xml_parse_result result = document.load_string(html.c_str(), pugi::parse_cdata | pugi::parse_trim_pcdata);

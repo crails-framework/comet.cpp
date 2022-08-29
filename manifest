@@ -9,4 +9,5 @@ email: michael@unetresgrossebite.com
 depends: * build2 >= 0.15.0
 depends: * bpkg >= 0.15.0
 depends: pugixml ^1.12.1
-depends: { libboost-program-options libboost-json } >= 1.74.0
+depends: { libboost-program-options libboost-process libboost-json } >= 1.74.0
+depends: { libcrails-cli libcrails-renderer libcrails-readfile libcrails-semantics } >= 2.0.0

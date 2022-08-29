@@ -1,9 +1,8 @@
 #include "context.hpp"
 #include <sstream>
+#include <crails/utils/semantics.hpp>
 
 Context Context::global;
-
-std::string dasherize(const std::string&);
 
 void Context::reset()
 {
@@ -48,7 +47,7 @@ void Context::load_global_element_types(const boost::json::array& elements)
     if (element_data["tagName"].is_string())
       name = boost::json::value_to<std::string>(element_data["tagName"]);
     else
-      name = dasherize(require);
+      name = Crails::dasherize(require);
     element_types.emplace(name, require);
   }
 }

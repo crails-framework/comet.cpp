@@ -6,6 +6,7 @@
 #include <list>
 #include <sstream>
 #include <algorithm>
+#include <crails/utils/semantics.hpp>
 
 using namespace std;
 
@@ -13,8 +14,6 @@ string make_attrs_from_element(const pugi::xml_node& node);
 void dom_generator(stringstream& stream, const pugi::xml_node& node, Class& object, unsigned short depth);
 
 const string parent_symbol = "__comet_parent";
-
-std::string dasherize(const std::string&);
 
 const std::map<AnchorMode, std::string> anchor_symbols{
   {ChildrenAnchor, "Comet::ChildrenAnchor"},
@@ -29,7 +28,7 @@ static std::string tag_name_for(Class& object)
   if (object.is_root())
   {
     auto attribute = object.get_element().attribute("tag-name");
-    return attribute.empty() ? dasherize(object.get_typename()) : string(attribute.value());
+    return attribute.empty() ? Crails::dasherize(object.get_typename()) : string(attribute.value());
   }
   return object.get_element().name();
 }
