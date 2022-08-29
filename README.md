@@ -23,16 +23,35 @@ bpkg build comet
 bpkg install comet --all --recursive config.install.sudo=sudo config.install.root=/usr/local
 ```
 
-This will install comet along with all its dependencies. You're good to go !
+This will install comet's project management command line interface on your system, allowing you
+to create new comet projects and build existing ones from C++ to JavaScript and/or WebAssembly.
 
-## You already have boost installed on your system
+#### You already have boost installed on your system
 Assuming you already have boost installed on your system, you may replace `bpkg build comet` with the following:
 
 ```
-bpkg build comet '?sys:libboost-program-options' '?sys:libboost-json'
+bpkg build comet '?sys:libboost-program-options' '?sys:libboost-json' '?sys:libboost-process'
 ```
-
 Which will build comet and install it using the boost libraries provided by your system.
+
+## Installing libcomet
+Next, you'll need to install the client library `libcomet`. This one, we need to build with Cheerp
+compiler, as you will link this library to your project when generating the JavaScript that you'll
+ship on your web pages. The process is similar to the previous step:
+
+```
+bpkg create -d comet-cheerp cc config.cxx=/opt/cheerp/bin/clang++ \
+  config.poptions="-target cheerp-genericjs -D__CHEERP_CLIENT__" \
+  config.c{,xx}.version=14.0.0
+bpkg add "https://github.com/crails-framework/libcomet.git#master"
+bpkg fetch
+
+bpkg build libcomet
+bpkg install libcomet --all --recursive \
+  config.install.sudo=sudo \
+  config.install.root=/usr/local \
+  config.install.lib=exec_root/lib/genericjs
+```
 
 Creating your first Comet.cpp application
 ======
