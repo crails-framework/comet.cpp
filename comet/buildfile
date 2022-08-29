@@ -1,0 +1,10 @@
+import libs += libboost-program-options%lib{boost_program_options}
+import libs += libboost-process%lib{boost_process}
+import libs += libcrails-cli%lib{crails-cli}
+import libs += libcrails-readfile%lib{crails-readfile}
+import libs += libcrails-renderer%lib{crails-renderer}
+import libs += libcrails-semantics%lib{crails-semantics}
+
+exe{comet}: {hxx ixx txx cxx}{**} $libs
+
+cxx.poptions =+ "-I$out_root" "-I$src_root"
