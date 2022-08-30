@@ -2,7 +2,7 @@ using namespace std;
 
 string @project_name;
 string @output_name = "application";
-string @rpath = "/usr/local/lib/genericjs"
+string @rpath = "/usr/local/lib/genericjs";
 string @generated_files_dir = "lib";
 // END LINKING
 # runs with the following option:

@@ -14,7 +14,7 @@ declare_renderer(project_application_hpp)
 ProjectRenderer::ProjectRenderer()
 {
   add_renderer("CMakeLists.txt",  project_cmakelists_txt);
-  add_renderer("main.cpp",        project_app_main_cpp);
-  add_renderer("routes.cpp",      project_app_routes_cpp);
-  add_renderer("application.hpp", project_app_controllers_application_hpp);
+  add_renderer("main.cpp",        project_main_cpp);
+  add_renderer("routes.cpp",      project_routes_cpp);
+  add_renderer("application.hpp", project_application_hpp);
 }

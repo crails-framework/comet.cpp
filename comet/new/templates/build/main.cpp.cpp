@@ -2,10 +2,10 @@
 #include "crails/shared_vars.hpp"
 #include "crails/template.hpp"
 
-class ProjectAppMainCpp : public Crails::Template
+class ProjectMainCpp : public Crails::Template
 {
 public:
-  ProjectAppMainCpp(const Crails::Renderer* renderer, Crails::SharedVars& vars) :
+  ProjectMainCpp(const Crails::Renderer* renderer, Crails::SharedVars& vars) :
     Crails::Template(renderer, vars)
   {}
 
@@ -18,7 +18,7 @@ private:
   std::stringstream ecpp_stream;
 };
 
-std::string render_project_app_main_cpp(const Crails::Renderer* renderer, Crails::SharedVars& vars)
+std::string render_project_main_cpp(const Crails::Renderer* renderer, Crails::SharedVars& vars)
 {
-  return ProjectAppMainCpp(renderer, vars).render();
+  return ProjectMainCpp(renderer, vars).render();
 }

@@ -22,13 +22,13 @@ public:
         && render_file(template_name, path);
   }
 private:
-  bool render_file(std::string_view template_name, std::filesystem::path);
+  bool render_file(std::string_view template_name, const std::filesystem::path& path)
   {
     Crails::RenderFile render_target;
 
     if (renderer.can_render("", template_name.data()))
     {
-      if (Crails::require_folder(path.string()))
+      if (Crails::require_folder("DIR", path.string()))
       {
         render_target.open(path.string());
         renderer.render_template(template_name.data(), render_target, vars);

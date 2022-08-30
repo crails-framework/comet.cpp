@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const string Renderer::default_format = "*";
+const string Crails::Renderer::default_format = "*";
 
 class Index : public Crails::CommandIndex
 {

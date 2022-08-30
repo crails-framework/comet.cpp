@@ -10,8 +10,8 @@ public:
     Crails::Template(renderer, vars), 
     project_name(Crails::cast<string>(vars, "project_name")), 
     output_name(Crails::cast<string>(vars, "output_name",  "application")), 
-    rpath(Crails::cast<string>(vars, "rpath",  "/usr/local/lib/genericjs"
-string @generated_files_dir = "lib"))
+    rpath(Crails::cast<string>(vars, "rpath",  "/usr/local/lib/genericjs")), 
+    generated_files_dir(Crails::cast<string>(vars, "generated_files_dir",  "lib"))
   {}
 
   std::string render()
@@ -28,6 +28,7 @@ private:
   string project_name;
   string output_name;
   string rpath;
+  string generated_files_dir;
 };
 
 std::string render_project_cmakelists_txt(const Crails::Renderer* renderer, Crails::SharedVars& vars)

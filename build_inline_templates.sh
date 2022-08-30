@@ -10,11 +10,11 @@ $ECPP \
   -i $PROJECT_TPL/CMakeLists.txt.ecpp \
   >  $PROJECT_TPL/build/CMakeLists.txt.cpp
 $ECPP \
-  -n ProjectAppMainCpp \
+  -n ProjectMainCpp \
   -i $PROJECT_TPL/main.cpp.ecpp \
   >  $PROJECT_TPL/build/main.cpp.cpp
 $ECPP \
-  -n ProjectAppRoutesCpp \
+  -n ProjectRoutesCpp \
   -i $PROJECT_TPL/routes.cpp.ecpp \
   >  $PROJECT_TPL/build/routes.cpp.cpp
 $ECPP \

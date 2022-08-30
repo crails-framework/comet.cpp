@@ -10,4 +10,4 @@ public:
   int              run() override;
 private:
   bool generate_html_elements();
-}
+};

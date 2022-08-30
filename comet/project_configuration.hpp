@@ -8,7 +8,7 @@ public:
   ProjectConfiguration() : Crails::ProjectVariables(".comet") {}
 
   static std::string project_directory() { return ProjectConfiguration().lookup_variable_path(); }
-  static void move_to_project_directory() { std::filesystem::current_path(project_directory); }
+  static void move_to_project_directory() { std::filesystem::current_path(project_directory()); }
   static std::string comet_bin_path() { return std::filesystem::canonical("/proc/self/exe").parent_path().string(); }
 
   std::string build_type() const { return variable_or("build-type", "Release"); }

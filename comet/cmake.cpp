@@ -42,12 +42,12 @@ public:
   }
 };
 
-bool comet_cmake_builder(ProjectConfiguration& configuration)
+bool comet_cmake_builder(const ProjectConfiguration& configuration)
 {
   return CMakeBuilder(
     configuration.project_directory(),
-    configuration.application_build_path(),
+    configuration.application_build_path()
   ).option("CMAKE_TOOLCHAIN_FILE", configuration.variable("cheerp-path") + "/share/cmake/Modules/CheerpToolchain.cmake")
-    .option("CMAKE_BUILD_TYPE", configuration.build_type())
-    .build();
+   .option("CMAKE_BUILD_TYPE", configuration.build_type())
+   .build();
 }
