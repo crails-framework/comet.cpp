@@ -1,5 +1,4 @@
 import libs += libboost-program-options%lib{boost_program_options}
-import libs += libboost-process%lib{boost_process}
 import libs += libcrails-cli%lib{crails-cli}
 import libs += libcrails-readfile%lib{crails-readfile}
 import libs += libcrails-renderer%lib{crails-renderer}
