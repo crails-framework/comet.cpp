@@ -6,6 +6,7 @@ Comet.cpp leverages [Cheerp](https://www.leaningtech.com/pages/cheerp.html)'s C+
 
 Install Comet.cpp
 ======
+## Installing the command line interface
 Before using comet, you will need to install Cheerp's transpiler, by following Cheerp's [Getting started](https://docs.leaningtech.com/cheerp/Getting-started) guide.
 
 Comet also uses the `build2` build toolchain to make installation as straightforward as possible. Follow the instrucations at [Build2's homepage](https://build2.org/install.xhtml) to install it.
@@ -35,54 +36,35 @@ bpkg build comet '?sys:libboost-program-options' '?sys:libboost-json' '?sys:libb
 Which will build comet and install it using the boost libraries provided by your system.
 
 ## Installing libcomet
-Next, you'll need to install the client library `libcomet`. This one, we need to build with Cheerp
-compiler, as you will link this library to your project when generating the JavaScript that you'll
-ship on your web pages. The process is similar to the previous step:
+Next, you'll need to install the client library `libcomet`. This one needs to be compiled by Cheerp's
+compiler, as you will link the resulting libraries to your frontend application.
 
 ```
+install_root=/usr/local
 bpkg create -d comet-cheerp cc config.cxx=/opt/cheerp/bin/clang++ \
-  config.poptions="-target cheerp-genericjs -D__CHEERP_CLIENT__" \
-  config.c{,xx}.version=14.0.0
+  config.poptions="-target cheerp-genericjs -D__CHEERP_CLIENT__ -I$install_root/include" \
+  config.c{,xx}.version=14.0.0 \
 bpkg add "https://github.com/crails-framework/libcomet.git#master"
 bpkg fetch
 
-bpkg build libcomet
-bpkg install libcomet --all --recursive \
-  config.install.sudo=sudo \
-  config.install.root=/usr/local \
-  config.install.lib=exec_root/lib/genericjs
+for package in libcrails-semantics libcrails-router libcomet ; do
+  bpkg build $package
+  bpkg install $package config.install.root=$install_root config.install.sudo=sudo
+done
 ```
 
 Creating your first Comet.cpp application
 ======
 ## Setting up a new comet application
-Install the `comet-cpp` gem using the following command: `gem install comet-cpp`.
+We will use the command line interface to bootstrap a new project, by running the following command: `comet new -n hello-world`.
 
-Then, create a new directory for your project, and run the following command: `comet-new -n hello-world`.
-
-The `comet-new` command will generate the basic file structure for your new project. Let's take a look at what's been created:
+The `comet new` command will generate the basic file structure for your new project. Let's take a look at what's been created:
 
 ```
 CMakeLists.txt		# The CMakeLists for your project.
-
-Gemfile			# Handles the ruby development dependencies for your project, such
-			# as comet or guard.
-
-Guardfile		# Configures guard to watch your files and generate the code for
-			# your html template and/or compile your code.
-
-app/			# Your code's directory
-app/main.cpp		# The entry point of your application. By default, it initializes the Application class.
-app/routes.cpp		# This is where you'll register your applications routes.
-app/application.hpp	# The main class of your application.
-app/controllers		# Your controller's directory
-app/models		# Your model's directory
-app/collections		# Your collection's directory
-app/views/              # Your html templates and custom elements code directory
-app/views/layouts/      # Your layout html templates' directory
-comet-elements/		# This is where the code generated for your html templates will be persisted and compiled from.
-public/			# This is the directory that will contain your static files and compiled assets.
-public/index.html       # A default index.html file generated to launch your Comet app from
+main.cpp		# The entry point of your application. By default, it initializes the Application class.
+routes.cpp		# This is where you'll register your applications routes.
+application.hpp		# The main class of your application.
 ```
 
 ## Creating a layout and a view
@@ -162,6 +144,3 @@ The `match_route` macro takes three parameters: a regular expression string to m
 Use the `comet-html` command to compile your html template into C++.
 
 Then, use the `comet-make` command to generate your application's javascript.
-
-## Launching the web server
-You can use the `comet-web` command to start a simple web server and test your application.
