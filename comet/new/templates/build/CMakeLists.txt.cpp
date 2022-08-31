@@ -17,10 +17,11 @@ public:
   std::string render()
   {
 ecpp_stream << "# runs with the following option:\n# -DCMAKE_TOOLCHAIN_FILE \"$CHEERP_PATH/share/cmake/Modules/CheerpToolchain.cmake\"\n\ncmake_minimum_required(VERSION 3.0)\n\nproject(" << ( project_name );
-  ecpp_stream << ")\ninclude_directories(lib)\n\nset(CMAKE_CXX_FLAGS \"-target cheerp-genericjs -D__CHEERP_CLIENT__\")\nset(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} -Wall -Wno-unknown-pragmas -pedantic\")\n\nif (CMAKE_BUILD_TYPE EQUAL \"DEBUG\")\n  set(CMAKE_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS}\" -cheerp-sourcemap=" << ( output_name );
+  ecpp_stream << ")\ninclude_directories(/usr/local/include " << ( generated_files_dir );
+  ecpp_stream << ")\nlink_directories(/usr/local/lib/genericjs /usr/lib/genericjs)\n\nset(CMAKE_CXX_FLAGS \"-target cheerp-genericjs -D__CHEERP_CLIENT__\")\nset(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} -Wall -Wno-unknown-pragmas -pedantic\")\n\nif (CMAKE_BUILD_TYPE EQUAL \"DEBUG\")\n  set(CMAKE_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS}\" -cheerp-sourcemap=" << ( output_name );
   ecpp_stream << ".js.map -cheerp-sourcemap-standalone)\nendif()\n\nfile(GLOB_RECURSE app_src *.cpp *.cxx)\n\nadd_executable(" << ( output_name );
   ecpp_stream << " ${app_src})\n\ntarget_link_libraries(" << ( output_name );
-  ecpp_stream << "\n  crails-semantics\n  crails-router\n  comet\n)\n";
+  ecpp_stream << "\n  crails-semantics\n  comet\n)\n";
     return ecpp_stream.str();
   }
 private:

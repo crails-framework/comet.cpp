@@ -5,7 +5,7 @@
 
 using namespace std;
 
-bool comet_cmake_builder(const ProjectConfiguration& configuration);
+bool comet_cmake_builder(const ProjectConfiguration& configuration, bool verbose);
 
 static bool run_command(const string& command)
 {
@@ -39,7 +39,7 @@ int Build::run()
   if (!generate_html_elements())
     return 2;
   if (configuration.variable("toolchain") == "cmake")
-    return comet_cmake_builder(configuration) ? 0 : 1;
+    return comet_cmake_builder(configuration, options.count("verbose")) ? 0 : 1;
   else
     cerr << "Cannot build with toolchain `" << configuration.variable("toolchain") << '`' << endl;
   return -1;

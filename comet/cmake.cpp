@@ -7,10 +7,12 @@ class CMakeBuilder : private Crails::WithPath
 {
   std::filesystem::path project_directory;
   std::stringstream options;
+  bool verbose = false;
 public:
-  CMakeBuilder(const std::filesystem::path& project_directory, const std::filesystem::path& build_directory) :
+  CMakeBuilder(const std::filesystem::path& project_directory, const std::filesystem::path& build_directory, bool verbose) :
     Crails::WithPath(build_directory),
-    project_directory(project_directory)
+    project_directory(project_directory),
+    verbose(verbose)
   {
   }
 
@@ -30,7 +32,7 @@ public:
 
   bool make()
   {
-    boost::process::child make("make");
+    boost::process::child make(verbose ? "make VERBOSE=1" : "make");
 
     make.wait();
     return make.exit_code() == 0;
@@ -42,11 +44,12 @@ public:
   }
 };
 
-bool comet_cmake_builder(const ProjectConfiguration& configuration)
+bool comet_cmake_builder(const ProjectConfiguration& configuration, bool verbose)
 {
   return CMakeBuilder(
     configuration.project_directory(),
-    configuration.application_build_path()
+    configuration.application_build_path(),
+    verbose
   ).option("CMAKE_TOOLCHAIN_FILE", configuration.variable("cheerp-path") + "/share/cmake/Modules/CheerpToolchain.cmake")
    .option("CMAKE_BUILD_TYPE", configuration.build_type())
    .build();
