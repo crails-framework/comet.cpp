@@ -1,0 +1,6 @@
+{
+  // Custom elements specified here are included by default in all html templates
+  "elements": [
+    // { "require": "Classname", "include": "header.hpp", "tagName", "html-tag" }
+  ]
+}

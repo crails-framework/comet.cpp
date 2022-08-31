@@ -30,11 +30,13 @@ boost::program_options::variables_map       get_options(int argc, char** argv);
 
 boost::json::object load_config(const std::string& path)
 {
-  boost::json::object result;
-  std::string         raw_json;
+  boost::json::object        result;
+  boost::json::parse_options options;
+  std::string                raw_json;
 
+  options.allow_comments = options.allow_trailing_commas = true;
   if (Crails::read_file(path, raw_json))
-    return boost::json::parse(raw_json).as_object();
+    return boost::json::parse(raw_json, {}, options).as_object();
   return result;
 }
 

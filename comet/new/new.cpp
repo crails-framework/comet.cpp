@@ -81,6 +81,7 @@ bool New::generate_project_structure()
   renderer.generate_file("application.hpp");
   renderer.generate_file("main.cpp");
   renderer.generate_file("routes.cpp");
+  renderer.generate_file("config.json", html_config_path);
   return true;
 }
 
@@ -105,18 +106,19 @@ bool New::move_to_project_directory()
 
 int New::run()
 {
+  html_output_path = html_config_path = filesystem::canonical(filesystem::current_path()).string() + '/';
   if (!options.count("name"))
     cerr << "option --name required" << endl;
   else if (move_to_project_directory())
   {
+    html_config_path += (options.count("html-config") ? options["html-config"].as<string>() : string("config.json"));
+    html_output_path += (options.count("html-output") ? options["html-output"].as<string>() : string("lib"));
+    html_config_path = filesystem::relative(html_config_path, filesystem::current_path());
+    html_output_path = filesystem::relative(html_output_path, filesystem::current_path());
     if (options.count("toolchain"))
       build_system = options["toolchain"].as<string>();
     if (options.count("cheerp-path"))
       cheerp_path = options["cheerp-path"].as<string>();
-    if (options.count("html-output"))
-      html_output_path = filesystem::relative(options["html-output"].as<string>(), filesystem::current_path()).string();
-    if (options.count("html-config"))
-      html_config_path = filesystem::relative(options["html-config"].as<string>(), filesystem::current_path()).string();
     configuration.variable("project_name", options["name"].as<string>());
     configuration.variable("toolchain",    build_system);
     configuration.variable("cheerp-path",  cheerp_path);

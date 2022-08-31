@@ -10,6 +10,7 @@ declare_renderer(project_cmakelists_txt)
 declare_renderer(project_main_cpp)
 declare_renderer(project_routes_cpp)
 declare_renderer(project_application_hpp)
+declare_renderer(project_config_json)
 
 ProjectRenderer::ProjectRenderer()
 {
@@ -17,4 +18,5 @@ ProjectRenderer::ProjectRenderer()
   add_renderer("main.cpp",        project_main_cpp);
   add_renderer("routes.cpp",      project_routes_cpp);
   add_renderer("application.hpp", project_application_hpp);
+  add_renderer("config.json",     project_config_json);
 }
