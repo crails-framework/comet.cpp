@@ -1,5 +1,6 @@
 #include "build.hpp"
 #include <boost/process.hpp>
+#include <filesystem>
 #include <iostream>
 
 using namespace std;
@@ -16,13 +17,19 @@ static bool run_command(const string& command)
 
 bool Build::generate_html_elements()
 {
-  stringstream command;
+  string template_folder = "views";
 
-  command << ProjectConfiguration::comet_bin_path() + "/comet-html"
-    << " -i views"
-    << " -o " << configuration.variable("local-libdir")
-    << " -c " << configuration.variable("html-config");
-  return run_command(command.str());
+  if (filesystem::is_directory(template_folder))
+  {
+    stringstream command;
+
+    command << ProjectConfiguration::comet_bin_path() + "/comet-html"
+      << " -i " << template_folder
+      << " -o " << configuration.variable("local-libdir")
+      << " -c " << configuration.variable("html-config");
+    return run_command(command.str());
+  }
+  return true;
 }
 
 int Build::run()

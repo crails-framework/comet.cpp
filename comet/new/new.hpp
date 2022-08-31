@@ -11,7 +11,7 @@ class New : public Crails::Command
   std::string html_output_path;
   std::string html_config_path;
 public:
-  std::string_view description() const override { return "create a new comet project"; }
+  std::string_view description() const override { return "Create a new comet project"; }
   void options_description(boost::program_options::options_description&) const override;
   int run() override;
 

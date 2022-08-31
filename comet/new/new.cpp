@@ -119,7 +119,7 @@ int New::run()
       build_system = options["toolchain"].as<string>();
     if (options.count("cheerp-path"))
       cheerp_path = options["cheerp-path"].as<string>();
-    configuration.variable("project_name", options["name"].as<string>());
+    configuration.variable("name",         options["name"].as<string>());
     configuration.variable("toolchain",    build_system);
     configuration.variable("cheerp-path",  cheerp_path);
     configuration.variable("html-config",  html_config_path);
