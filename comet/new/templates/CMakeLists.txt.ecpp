@@ -1,9 +1,11 @@
+#include <vector>
 using namespace std;
 
 string @project_name;
 string @output_name = "application";
 string @rpath = "/usr/local/lib/genericjs";
 string @generated_files_dir = "lib";
+vector<string> @external_sources;
 // END LINKING
 # runs with the following option:
 # -DCMAKE_TOOLCHAIN_FILE "$CHEERP_PATH/share/cmake/Modules/CheerpToolchain.cmake"
@@ -21,7 +23,12 @@ if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" -cheerp-sourcemap=<%= output_name %>.js.map -cheerp-sourcemap-standalone)
 endif()
 
-file(GLOB_RECURSE app_src *.cpp *.cxx)
+file(GLOB_RECURSE app_src
+  *.cpp *.cxx
+<% for (const string& source : external_sources) do %>
+  <%= source %>
+<% end %>
+)
 
 add_executable(<%= output_name %> ${app_src})
 
