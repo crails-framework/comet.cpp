@@ -11,7 +11,9 @@ public:
   void options_description(boost::program_options::options_description& desc) const override
   {
     desc.add_options()
-      ("verbose,v", "enable verbose mode");
+      ("verbose,v", "enable verbose mode")
+      ("mode,m", boost::program_options::value<std::string>(), "Release or Debug: defaults to build-type value in the .comet file")
+      ("clean,c", "cleanup before building");
   }
 
 private:
