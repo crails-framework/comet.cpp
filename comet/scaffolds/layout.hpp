@@ -4,7 +4,7 @@
 #include <crails/utils/semantics.hpp>
 #include "../file_renderer.hpp"
 
-class LayoutScaffold : public ScaffoldModel
+class LayoutScaffold : public Crails::ScaffoldModel
 {
   FileRenderer renderer;
   std::string name = "application";

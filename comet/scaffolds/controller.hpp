@@ -3,7 +3,7 @@
 #include <crails/utils/string.hpp>
 #include "../file_renderer.hpp"
 
-class ControllerScaffold : public ScaffoldModel
+class ControllerScaffold : public Crails::ScaffoldModel
 {
   FileRenderer renderer;
   std::string name;

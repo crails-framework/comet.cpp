@@ -17,7 +17,7 @@ public:
   {
     add_command("new",      []() { return make_shared<New>(); });
     add_command("build",    []() { return make_shared<Build>(); });
-    add_command("scaffold", []() { return make_shared<Scaffold>(); });
+    add_command("scaffold", []() { return make_shared<::Scaffold>(); });
   }
 };
 
