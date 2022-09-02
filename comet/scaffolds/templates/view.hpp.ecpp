@@ -1,0 +1,12 @@
+using namespace std;
+
+string @classname;
+string @element;
+string @include;
+// END LINKING
+#pragma once
+#include "<%= include %>"
+
+class <%= classname %> : public <%= element %>
+{
+};

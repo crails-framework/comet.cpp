@@ -1,0 +1,13 @@
+using namespace std;
+
+string @classname;
+string @element;
+string @include;
+// END LINKING
+#pragma once
+#include <comet/mvc/layout.hpp>
+#include "<%= include %>"
+
+class <%= classname %> : public Comet::Layout<<%= element %>>
+{
+};

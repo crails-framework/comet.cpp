@@ -1,5 +1,5 @@
 #include "new.hpp"
-#include "project_renderer.hpp"
+#include "../project_renderer.hpp"
 #include <crails/cli/filesystem.hpp>
 #include <crails/render_file.hpp>
 #include <filesystem>
@@ -67,7 +67,7 @@ bool New::generate_project_structure()
   renderer.should_overwrite = options.count("force");
   renderer.vars["project_name"] = options["name"].as<string>();
   renderer.vars["generated_files_dir"] = html_output_path;
-  renderer.vars["external_sources"] = external_sources;
+  renderer.vars["external_sources"] = &external_sources;
   if (options.count("rpath"))
     renderer.vars["rpath"] = options["rpath"].as<string>();
   if (options.count("filename"))

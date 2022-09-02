@@ -13,7 +13,7 @@ public:
     output_name(Crails::cast<string>(vars, "output_name",  "application")), 
     rpath(Crails::cast<string>(vars, "rpath",  "/usr/local/lib/genericjs")), 
     generated_files_dir(Crails::cast<string>(vars, "generated_files_dir",  "lib")), 
-    external_sources(Crails::cast<vector<string>>(vars, "external_sources"))
+    external_sources(reinterpret_cast<vector<string>&>(*Crails::cast<vector<string>*>(vars, "external_sources")))
   {}
 
   std::string render()
@@ -26,7 +26,9 @@ ecpp_stream << "# runs with the following option:\n# -DCMAKE_TOOLCHAIN_FILE \"$C
   ecpp_stream << "\n  " << ( source );
   ecpp_stream << "";
  };
-  ecpp_stream << "\n)\n\nadd_executable(" << ( output_name );
+  ecpp_stream << "\n  " << ( generated_files_dir );
+  ecpp_stream << "/*.cpp " << ( generated_files_dir );
+  ecpp_stream << "/*.cxx\n)\n\nadd_executable(" << ( output_name );
   ecpp_stream << " ${app_src})\n\ntarget_link_libraries(" << ( output_name );
   ecpp_stream << "\n  crails-semantics\n  comet\n)\n";
     return ecpp_stream.str();
@@ -37,7 +39,7 @@ private:
   string output_name;
   string rpath;
   string generated_files_dir;
-  vector<string> external_sources;
+  vector<string>& external_sources;
 };
 
 std::string render_project_cmakelists_txt(const Crails::Renderer* renderer, Crails::SharedVars& vars)

@@ -1,0 +1,5 @@
+<template>
+  <body>
+    <slot name="content"></slot>
+  </body>
+</template>

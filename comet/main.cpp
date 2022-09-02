@@ -4,6 +4,7 @@
 #include <crails/renderer.hpp>
 #include "new/new.hpp"
 #include "build/build.hpp"
+#include "scaffolds/scaffold.hpp"
 
 using namespace std;
 
@@ -14,8 +15,9 @@ class Index : public Crails::CommandIndex
 public:
   Index()
   {
-    add_command("new",   []() { return make_shared<New>(); });
-    add_command("build", []() { return make_shared<Build>(); });
+    add_command("new",      []() { return make_shared<New>(); });
+    add_command("build",    []() { return make_shared<Build>(); });
+    add_command("scaffold", []() { return make_shared<Scaffold>(); });
   }
 };
 

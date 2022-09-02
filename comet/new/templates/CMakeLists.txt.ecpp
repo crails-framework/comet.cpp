@@ -5,7 +5,7 @@ string @project_name;
 string @output_name = "application";
 string @rpath = "/usr/local/lib/genericjs";
 string @generated_files_dir = "lib";
-vector<string> @external_sources;
+vector<string>& @external_sources;
 // END LINKING
 # runs with the following option:
 # -DCMAKE_TOOLCHAIN_FILE "$CHEERP_PATH/share/cmake/Modules/CheerpToolchain.cmake"
@@ -28,6 +28,7 @@ file(GLOB_RECURSE app_src
 <% for (const string& source : external_sources) do %>
   <%= source %>
 <% end %>
+  <%= generated_files_dir %>/*.cpp <%= generated_files_dir %>/*.cxx
 )
 
 add_executable(<%= output_name %> ${app_src})

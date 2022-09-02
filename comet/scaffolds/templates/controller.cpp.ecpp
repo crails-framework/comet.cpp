@@ -1,0 +1,10 @@
+std::string @filename;
+std::string @classname;
+// END LINKING
+#include "<%= filename %>.hpp"
+
+using namespace std;
+
+<%= classname %>::<%= classname %>(const Comet::Params& params) : Comet::Controller(params)
+{
+}

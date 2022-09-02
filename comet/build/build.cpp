@@ -25,8 +25,10 @@ bool Build::generate_html_elements()
 
     command << ProjectConfiguration::comet_bin_path() + "/comet-html"
       << " -i " << template_folder
-      << " -o " << configuration.variable("local-libdir")
+      << " -o " << configuration.variable("local-libdir") + "/templates"
       << " -c " << configuration.variable("html-config");
+    if (options.count("verbose"))
+      cout << "+ " << command.str() << endl;
     return run_command(command.str());
   }
   return true;

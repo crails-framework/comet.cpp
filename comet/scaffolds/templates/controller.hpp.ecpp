@@ -1,0 +1,13 @@
+std::string @classname;
+// END LINKING
+#pragma once
+#include <comet/mvc/controller.hpp>
+
+class <%= classname %> : public Comet::Controller
+{
+public:
+  <%= classname %>(const Comet::Params&);
+
+  Comet::Promise initialize() { return Comet::Controller::initialize(); }
+  Comet::Promise finalize()   { return Comet::Controller::finalize(); }
+};

@@ -1,6 +1,7 @@
 #!/bin/bash -ex
 ECPP=ecpp
 PROJECT_TPL=comet/new/templates
+SCAFFOLD_TPL=comet/scaffolds/templates
 ##
 ## AppTemplate
 ##
@@ -25,3 +26,31 @@ $ECPP \
   -n ProjectConfigJson \
   -i $PROJECT_TPL/config.json.ecpp \
   >  $PROJECT_TPL/build/config.json.cpp
+
+##
+## Scaffolds
+##
+$ECPP \
+  -n ScaffoldLayoutHtml \
+  -i $SCAFFOLD_TPL/layout.html.ecpp \
+  >  $SCAFFOLD_TPL/build/layout.html.cpp
+$ECPP \
+  -n ScaffoldLayoutHpp \
+  -i $SCAFFOLD_TPL/layout.hpp.ecpp \
+  >  $SCAFFOLD_TPL/build/layout.hpp.cpp
+$ECPP \
+  -n ScaffoldViewHtml \
+  -i $SCAFFOLD_TPL/view.html.ecpp \
+  >  $SCAFFOLD_TPL/build/view.html.cpp
+$ECPP \
+  -n ScaffoldViewHpp \
+  -i $SCAFFOLD_TPL/view.hpp.ecpp \
+  >  $SCAFFOLD_TPL/build/view.hpp.cpp
+$ECPP \
+  -n ScaffoldControllerHpp \
+  -i $SCAFFOLD_TPL/controller.hpp.ecpp \
+  >  $SCAFFOLD_TPL/build/controller.hpp.cpp
+$ECPP \
+  -n ScaffoldControllerCpp \
+  -i $SCAFFOLD_TPL/controller.cpp.ecpp \
+  >  $SCAFFOLD_TPL/build/controller.cpp.cpp
