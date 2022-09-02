@@ -1,7 +1,8 @@
 #pragma once
 #include <crails/cli/scaffold.hpp>
-#include "controller.hpp"
+#include "model.hpp"
 #include "view.hpp"
+#include "controller.hpp"
 #include "layout.hpp"
 #include <iostream>
 
@@ -12,6 +13,7 @@ public:
   {
     return Scaffolds{
       {"controller", []() { return new ControllerScaffold; }},
+      {"model",      []() { return new ModelScaffold; }},
       {"view",       []() { return new ViewScaffold; }},
       {"layout",     []() { return new LayoutScaffold; }}
     };

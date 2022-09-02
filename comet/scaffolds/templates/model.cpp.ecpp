@@ -1,0 +1,44 @@
+#include <algorithm>
+using namespace std;
+
+string              @filename;
+string              @classname;
+map<string, string> @properties;
+// END LINKING
+#pragma once
+#include "<%= filename %>.hpp"
+#include <sstream>
+
+using namespace std;
+
+string <%= classname %>::get_url()
+{
+  stringstream url;
+
+  url << '/' << get_resource_name();
+  if (get_id() != COMET_MVC_NULL_ID)
+    url << '/' << get_id();
+  return url.str();
+}
+
+string <%= classname %>::to_json()
+{
+  DataTree object;
+
+<% for (auto it = properties.begin() ; it != properties.end() ; ++it) do %>
+<%   if (it->second == "DataTree") do %>
+  object["<%= it->first %>"].merge(<%= it->first %>.as_data());
+<%   end else do %>
+  object["<%= it->first %>"] = <%= it->first %>;
+<%   end %>
+<% end %>
+  return object.to_json();
+}
+
+void <%= classname %>::from_json(Data params)
+{
+<% for (auto it = properties.begin() ; it != properties.end() ; ++it) do %>
+  if (params["<%= it->first %>"].exists())
+    set_<%= it->first %>(params["<%= it->first %>"]);
+<% end %>
+}

@@ -54,3 +54,11 @@ $ECPP \
   -n ScaffoldControllerCpp \
   -i $SCAFFOLD_TPL/controller.cpp.ecpp \
   >  $SCAFFOLD_TPL/build/controller.cpp.cpp
+$ECPP \
+  -n ScaffoldModelHpp \
+  -i $SCAFFOLD_TPL/model.hpp.ecpp \
+  >  $SCAFFOLD_TPL/build/model.hpp.cpp
+$ECPP \
+  -n ScaffoldModelCpp \
+  -i $SCAFFOLD_TPL/model.cpp.ecpp \
+  >  $SCAFFOLD_TPL/build/model.cpp.cpp

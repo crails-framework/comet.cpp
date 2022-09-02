@@ -1,0 +1,36 @@
+#include <algorithm>
+using namespace std;
+
+string              @classname;
+map<string, string> @properties;
+vector<string>      scalar_types = {"bool","char","unsigned char","char16_t","char32_t","wchar_t","signed char","int","unsigned int","short","unsigned short","long","long long","unsigned long","unsigned long long","double","long double","float","std::size_t","std::time_t"};
+// END LINKING
+#pragma once
+#include <crails/mvc/model.hpp>
+
+class <%= classname %> : public Comet::JsonModel
+{
+public:
+  std::string get_url() const override;
+  std::string to_json() const override;
+  void from_json(Data) override;
+
+<% for (auto it = properties.begin() ; it != properties.end() ; ++it) do %>
+<%   if (it->second == "DataTree") do %>
+  DataTree& get_<%= it->first %>() { return <%= it->first %>; }
+  const DataTree& get_<%= it->first %>() const { return <%= it->first %>; }
+  void set_<%= it->first %>(Data value) { this-><%= it->first %>.clear(); this-><%= it->first %>.as_data().merge(value); }
+<%   end else if (std::find(scalar_types.begin(), scalar_types.end(), it->second) != scalar_types.end()) do %>
+  void set_<%= it->first %>(<%= it->second %> value) { this-><%= it->first %> = value; }
+  <%= it->second %> get_<%= it->first %>() const { return <%= it->first %>; }
+<%   end else do %>
+  void set_<%= it->first %>(const <%= it->second %>& value) { this-><%= it->first %> = value; }
+  const <%= it->second %>& get_<%= it->first %>() const { return <%= it->first %>; }
+<%   end %>
+<% end %>
+
+private:
+<% for (auto it = properties.begin() ; it != properties.end() ; ++it) do %>
+  <%= it->second %> <%= it->first %>;
+<% end %>
+};

@@ -1,0 +1,16 @@
+#pragma once
+#include <comet/mvc/model.hpp>
+#include <comet/lexical_cast.hpp>
+
+class ApplicationModel : public Comet::JsonModel
+{
+public:
+  virtual std::string get_url() const override
+  {
+    std::string base = '/' + get_resource_name();
+
+    if (get_id() != COMET_MVC_NULL_ID)
+      return base + '/' + Comet::lexical_cast<std::string>(get_id());
+    return base;
+  }
+};

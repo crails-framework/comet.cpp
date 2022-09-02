@@ -17,6 +17,8 @@ declare_renderer(scaffold_view_html)
 declare_renderer(scaffold_view_hpp)
 declare_renderer(scaffold_controller_hpp)
 declare_renderer(scaffold_controller_cpp)
+declare_renderer(scaffold_model_hpp)
+declare_renderer(scaffold_model_cpp)
 
 ProjectRenderer::ProjectRenderer()
 {
@@ -28,6 +30,8 @@ ProjectRenderer::ProjectRenderer()
 
   add_renderer("scaffolds/controller.hpp", scaffold_controller_hpp);
   add_renderer("scaffolds/controller.cpp", scaffold_controller_cpp);
+  add_renderer("scaffolds/model.hpp",      scaffold_model_hpp);
+  add_renderer("scaffolds/model.cpp",      scaffold_model_cpp);
   add_renderer("scaffolds/view.html",      scaffold_view_html);
   add_renderer("scaffolds/view.hpp",       scaffold_view_hpp);
   add_renderer("scaffolds/layout.html",    scaffold_layout_html);
