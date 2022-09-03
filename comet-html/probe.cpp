@@ -8,7 +8,7 @@
 
 using namespace std;
 
-static bool is_slot    (const pugi::xml_node& element) { return element.name() == "slot"; }
+static bool is_slot    (const pugi::xml_node& element) { return element.name() == string("slot"); }
 static bool is_repeater(const pugi::xml_node& element) { return !element.attribute("repeat.for").empty(); }
 static bool has_cpp_class_attribute(const pugi::xml_node& element) { return !element.attribute("_cheerp_class").empty(); }
 

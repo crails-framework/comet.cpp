@@ -64,7 +64,7 @@ string Generator::generate_source()
   stringstream stream;
 
   stream << "#include <comet/lexical_cast.hpp>" << endl
-          << "#include \"" << compiled_header_path() << '"' << endl << endl;
+          << "#include " << filesystem::path(compiled_header_path()).filename() << endl << endl;
   for (const auto& class_ : generated_classes())
     stream << SourceGenerator(*class_).generate() << endl;
   return stream.str();
@@ -170,7 +170,7 @@ static string replace_extension(const string& path, const string& extension) { r
 
 string Generator::relative_filepath() const
 {
-  return std::filesystem::relative(Context::global.file_path, Context::global.input_folder).string();
+  return filesystem::relative(Context::global.file_path, Context::global.input_folder).string();
 }
 
 string Generator::compiled_header_path() const
