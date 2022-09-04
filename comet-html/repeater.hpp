@@ -56,7 +56,7 @@ public:
   bool        is_anchorable() const override { return true; }
   bool        is_repeater() const override { return true; }
   bool        blocks_remote_references() const override { return true; }
-  std::string constructor_declaration() const override { return get_typename() + '(' + parent->get_typename() + "*, " + value_type + ')'; }
+  std::string constructor_declaration() const override { return get_typename() + '(' + parent->get_typename() + "*, " + value_type + ");"; }
 
   const std::string& get_list_type() const { return list_type; }
   const std::string& get_list_name() const { return list_name; }
