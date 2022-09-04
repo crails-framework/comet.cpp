@@ -1,4 +1,16 @@
+#include <map>
+using namespace std;
+
+map<string,string>& @properties;
+// END LINKING
 <template>
+<% if (properties.size() > 0) do %>
+  <head>
+<%   for (auto it = properties.begin() ; it != properties.end() ; ++it) do %>
+    <attribute name="<%= it->first %>" type="<%= it->second %>" />
+<%   end %>
+  </head>
+<% end %>
   <body>
   </body>
 </template>
