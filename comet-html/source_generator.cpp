@@ -181,7 +181,7 @@ static void generate_dom_constructor(stringstream& stream, Class& object)
   if (html_attributes.length() > 0)
     stream << "  attr({" << html_attributes << "});" << endl;
   if (dom_stream.rdbuf()->in_avail())
-    stream << "  inner({" << dom_stream.str() << endl << "  });" << endl;
+    stream << "  inner(std::vector<Comet::Element>{" << dom_stream.str() << endl << "  });" << endl;
 }
 
 static void generate_anchor_initializers(stringstream& stream, Class& object)

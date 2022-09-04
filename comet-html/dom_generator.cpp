@@ -68,7 +68,7 @@ static void dom_element_generator(stringstream& stream, const pugi::xml_node& no
     stream << ".attr({" << attributes << "})";
   dom_generator(children_stream, node, object, depth + 1);
   if (children_stream.rdbuf()->in_avail())
-    stream << ".inner({" << children_stream.str() << endl << indent(depth) << "})";
+    stream << " > std::vector<Comet::Element>{" << children_stream.str() << endl << indent(depth) << "}";
 }
 
 static void dom_text_generator(stringstream& stream, const pugi::xml_node& node, Class& object, unsigned short depth)
