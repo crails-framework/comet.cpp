@@ -22,17 +22,17 @@ shared_ptr<ReferenceBase> Class::find_reference_for(pugi::xml_node element) cons
 {
   for (const auto& reference : references)
   {
-    if (reference->get_element().path() == element.path())
+    if (reference->get_element() == element)
       return reference;
   }
-  return element.path() == this->element.path() ? make_shared<ThisReference>() : nullptr;
+  return element == this->element ? make_shared<ThisReference>() : nullptr;
 }
 
 shared_ptr<Class> Class::find_class_for(pugi::xml_node element) const
 {
   for (ClassPtr child : collect_children())
   {
-    if (child->element.path() == element.path())
+    if (child->element == element)
       return child;
   }
   return nullptr;
