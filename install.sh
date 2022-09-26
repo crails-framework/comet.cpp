@@ -37,6 +37,17 @@ if [[ -z "$INSTALL_ROOT" ]] ; then
   read INSTALL_ROOT
 fi
 
+##
+## Prepare build2
+##
+if ! which bpkg ; then
+  echo "+ bpkg does not appear to be installed. Installing build2:"
+  BUILD2_VERSION="0.15.0"
+  curl -sSfO https://download.build2.org/$BUILD2_VERSION/build2-install-$BUILD2_VERSION.sh
+  chmod +x build2-install-$BUILD2_VERSION.sh
+  sh build2-install-$BUILD2_VERSION.sh
+fi
+
 COMPILER_VERSION=`$CHEERP_PATH/bin/clang++ --version | sed -n 1p | cut -d' ' -f5`
 BUILD_DIR="build-cheerp-$COMPILER_VERSION"
 
@@ -52,6 +63,7 @@ bpkg create -d "$BUILD_DIR" cc \
 cd "$BUILD_DIR"
 
 echo "+ fetching dependencies"
+bpkg add "https://github.com/crails-framework/libtext-archive.git#$CRAILS_VERSION"
 bpkg add "https://github.com/crails-framework/libcrails-semantics.git#$CRAILS_VERSION"
 bpkg add "https://github.com/crails-framework/libcrails-router.git#$CRAILS_VERSION"
 bpkg add "https://github.com/crails-framework/libcomet.git#$CRAILS_VERSION"
