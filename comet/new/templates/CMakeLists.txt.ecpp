@@ -16,7 +16,7 @@ project(<%= project_name %>)
 include_directories(/usr/local/include <%= generated_files_dir %>)
 link_directories(/usr/local/lib/genericjs /usr/lib/genericjs)
 
-set(CMAKE_CXX_FLAGS "-target cheerp-genericjs -D__CHEERP_CLIENT__")
+set(CMAKE_CXX_FLAGS "-target cheerp-genericjs -fexceptions -D__CHEERP_CLIENT__ -D__COMET_CLIENT__")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-unknown-pragmas -pedantic")
 
 if (CMAKE_BUILD_TYPE EQUAL "DEBUG")

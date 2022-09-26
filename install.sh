@@ -35,6 +35,7 @@ fi
 if [[ -z "$INSTALL_ROOT" ]] ; then
   echo -n "> Install path (default: $DEFAULT_INSTALL_ROOT): "
   read INSTALL_ROOT
+  if [ -z "$INSTALL_ROOT" ] ; then export INSTALL_ROOT="$DEFAULT_INSTALL_ROOT" ; fi
 fi
 
 ##
@@ -54,7 +55,7 @@ BUILD_DIR="build-cheerp-$COMPILER_VERSION"
 echo "+ creating package at $BUILD_DIR"
 bpkg create -d "$BUILD_DIR" cc \
   config.cxx="$CHEERP_PATH/bin/clang++" \
-  config.cxx.poptions="-target cheerp-genericjs -D__CHEERP_CLIENT__ -I/usr/local/include" \
+  config.cxx.poptions="-target cheerp-genericjs -fexceptions -D__CHEERP_CLIENT__ -I/usr/local/include" \
   config.c{,xx}.version=$COMPILER_VERSION \
   config.install.sudo=sudo \
   config.install.root=$INSTALL_ROOT \
