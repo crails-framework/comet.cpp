@@ -15,6 +15,7 @@ echo ""
 crails_packages=(
   libcrails-semantics
   libcrails-router
+  libtext-archive
   libcomet
 )
 
