@@ -40,6 +40,8 @@ struct CppReference : public ReferenceBase
   bool has_initializer() const override { return initializer.length() > 0; }
   bool has_getter() const override { return true; }
   bool has_setter() const override { return setter_enabled; }
+  void disable_setter() { setter_enabled = false; }
+  void set_initializer(const std::string& value) { initializer = value; }
 private:
   bool        setter_enabled = true;
 };

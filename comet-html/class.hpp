@@ -67,6 +67,7 @@ public:
   const pugi::xml_node& get_element() const { return element; }
   const std::string&    get_anchor_name() const { return anchor_name; }
   const std::string&    get_inline_code() const { return inline_code; }
+  void                  append_reference(std::shared_ptr<ReferenceBase> value) { references.push_back(value); }
 
   virtual void create_reference(pugi::xml_node element, Reference::Mode mode = Reference::UnspecifiedReferenceMode)
   {

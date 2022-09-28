@@ -1,5 +1,6 @@
 #include "slot.hpp"
 #include <sstream>
+#include <iostream>
 
 using namespace std;
 
@@ -72,4 +73,22 @@ SlotPlugin::SlotPlugin(pugi::xml_node element, std::shared_ptr<Class> parent, pu
   super_class = Context::global.find_cpp_type(element.name(), Context::global.template_base_subtype());
   if (is_custom_element())
     Context::global.use_cpp_type(element.name());
+  if (has_reference())
+  {
+    ClassPtr ref_root = SlotBase::find_remote_reference_holder();
+    if (!ref_root)
+    {
+      cerr << "[comet-html] ignoring ref at " << Context::global.file_path.string() << ':' << endl;
+      element.print(cout);
+    }
+    else
+    {
+      auto reference = make_shared<CppReference>(element, type_name, element.attribute("ref").value());
+
+      parent = ref_root;
+      reference->set_initializer(constructor_params());
+      reference->disable_setter();
+      ref_root->append_reference(reference);
+    }
+  }
 }
