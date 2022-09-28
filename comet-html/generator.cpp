@@ -116,6 +116,30 @@ void Generator::initialize_attributes()
   }
 }
 
+static std::string type_without_leading_empty_scope(const std::string& type)
+{
+  return type[0] == ':' && type[1] == ':'
+    ? type.substr(2)
+    : type;
+}
+
+static std::string cpp_type_to_tag(const std::string& type)
+{
+  std::string source = type_without_leading_empty_scope(type);
+  std::string result;
+
+  for (int i = 0 ; i < source.length() ; ++i)
+  {
+    if (source[i] == ':' && source[i + 1] == ':')
+      ++i;
+    else if (source[i] == '<')
+      break ;
+    else
+      result += source[i];
+  }
+  return Crails::dasherize(result);
+}
+
 void Generator::load_includes()
 {
   pugi::xpath_node_set includes = head.select_nodes("include");
@@ -132,7 +156,7 @@ void Generator::load_includes()
       string tag_name;
 
       if (tag_attribute.empty())
-        tag_name = Crails::dasherize(type); // TODO: replace "::" with "_", remove anything after '<'
+        tag_name = cpp_type_to_tag(type);
       else
         tag_name = tag_attribute.value();
       Context::global.element_types.emplace(tag_name, type);

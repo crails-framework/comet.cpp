@@ -66,7 +66,8 @@ static void dom_element_generator(stringstream& stream, const pugi::xml_node& no
     stream << reference->get_name();
   if (attributes.length() > 0)
     stream << ".attr({" << attributes << "})";
-  dom_generator(children_stream, node, object, depth + 1);
+  if (!Context::global.has_cpp_type(node))
+    dom_generator(children_stream, node, object, depth + 1);
   if (children_stream.rdbuf()->in_avail())
     stream << " > std::vector<Comet::Element>{" << children_stream.str() << endl << indent(depth) << "}";
 }

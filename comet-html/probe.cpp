@@ -8,8 +8,9 @@
 
 using namespace std;
 
-static bool is_slot    (const pugi::xml_node& element) { return element.name() == string("slot"); }
-static bool is_repeater(const pugi::xml_node& element) { return !element.attribute("repeat.for").empty(); }
+static bool is_slot       (const pugi::xml_node& element) { return element.name() == string("slot"); }
+static bool is_slot_plugin(const pugi::xml_node& element) { return !element.attribute("slot").empty(); }
+static bool is_repeater   (const pugi::xml_node& element) { return !element.attribute("repeat.for").empty(); }
 static bool has_cpp_class_attribute(const pugi::xml_node& element) { return !element.attribute("_cheerp_class").empty(); }
 
 void Probe::probe(Class& object)
@@ -68,7 +69,7 @@ void Probe::probe_slots_plugins(Class& object, const pugi::xml_node* root)
     {
       for (const pugi::xml_node& candidate : element.children())
       {
-        if (is_slot(candidate))
+        if (is_slot_plugin(candidate))
         {
           auto slot_plugin = Context::make<SlotPlugin>(candidate, object.shared_from_this(), element);
 

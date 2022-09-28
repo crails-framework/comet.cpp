@@ -25,7 +25,7 @@ struct Context
   virtual std::string element_base_type() const     { return "Comet::Element"; }
 
   void        reset();
-  bool        has_cpp_type(pugi::xml_node node) const { return element_types.find(node.name()) != element_types.end(); }
+  bool        has_cpp_type(pugi::xml_node node) const { return element_types.find(node.name()) != element_types.end() || !node.attribute("slot").empty(); }
   void        use_cpp_type(const std::string& name);
   std::string find_cpp_type(const std::string& name, const std::string& fallback = "") const;
   std::string generate_new_reference_name();

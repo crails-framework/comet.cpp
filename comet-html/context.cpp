@@ -24,7 +24,10 @@ std::string Context::find_cpp_type(const std::string& name, const std::string& f
 
 void Context::use_cpp_type(const std::string& name)
 {
-  referenced_types.push_back(element_types.at(name));
+  auto it = element_types.find(name);
+
+  if (it != element_types.end())
+    referenced_types.push_back(it->second);
 }
 
 std::string Context::generate_new_reference_name()

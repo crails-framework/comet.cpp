@@ -87,3 +87,13 @@ bool Class::inherits_binding_methods() const
 {
   return Context::global.template_base_subtype() != super_class && Context::global.template_base_type() != super_class;
 }
+
+bool Class::has_reference_to_node(const pugi::xml_node& element) const
+{
+  for (auto it = references.begin() ; it != references.end() ; ++it)
+  {
+    if ((*it)->get_element() == element)
+      return true;
+  }
+  return false;
+}
