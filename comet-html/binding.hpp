@@ -8,6 +8,7 @@ class Binding
   pugi::xml_node         element;
   std::shared_ptr<Class> parent;
   bool                   is_cpp;
+  bool                   plain_setter = false;
   std::string            attribute_name;
   std::string            bind_mode;
   std::string            code;
@@ -20,7 +21,9 @@ public:
     bind_mode      = value_and_bind_mode.second;
     is_cpp         = name.substr(0, 5) == "cpp::";
     attribute_name = name;
-    attribute_name.erase(name.length() - std::string(".bind").length());
+    plain_setter = name.find(".bind") == std::string::npos;
+    if (!plain_setter)
+      attribute_name.erase(name.length() - std::string(".bind").length());
     if (is_cpp)
       attribute_name.erase(0, 5);
     if (parent_.find_reference_for(element) == nullptr)
@@ -33,6 +36,7 @@ public:
   const std::string&    get_bind_mode() const { return bind_mode; }
 
   bool binds_to_cpp_property() const { return is_cpp; }
+  bool is_plain_setter() const { return plain_setter; }
 
   static std::pair<std::string, std::string> extract_bind_mode_from(std::string value)
   {

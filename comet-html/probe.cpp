@@ -119,6 +119,7 @@ void Probe::probe_bindings_for(Class& object, const pugi::xml_node& element)
 {
   static const regex listener_regex("\\.trigger$", std::regex_constants::optimize);
   static const regex binding_regex("\\.bind$", std::regex_constants::optimize);
+  static const regex cpp_setter_regex("^cpp::", std::regex_constants::optimize);
 
   for (const pugi::xml_attribute& attribute : element.attributes())
   {
@@ -126,7 +127,9 @@ void Probe::probe_bindings_for(Class& object, const pugi::xml_node& element)
 
     if (sregex_iterator(name.begin(), name.end(), listener_regex) != sregex_iterator())
       object.event_listeners.push_back(make_shared<EventListener>(element, object, attribute.name(), attribute.value()));
-    else if (sregex_iterator(name.begin(), name.end(), binding_regex) != sregex_iterator())
+    else if (sregex_iterator(name.begin(), name.end(), binding_regex) != sregex_iterator()
+         || (sregex_iterator(name.begin(), name.end(), cpp_setter_regex) != sregex_iterator())
+    )
       object.bindings.push_back(make_shared<Binding>(element, object, attribute.name(), attribute.value()));
   }
 }

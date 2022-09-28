@@ -118,6 +118,11 @@ static void generate_binding_initializers(stringstream& stream, Class& object)
   {
     const auto reference = object.find_reference_for(binding->get_element());
 
+    if (binding->is_plain_setter())
+    {
+      stream << "  " << reference->get_name() << ".set_" << binding->get_attribute_name() << '(' << binding->get_code() << ");" << endl;
+      continue ;
+    }
     stream << "  bound_attributes.push_back("
            << "Comet::Bindable(";
     if (binding->binds_to_cpp_property())

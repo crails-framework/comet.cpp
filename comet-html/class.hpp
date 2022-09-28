@@ -59,7 +59,6 @@ public:
   const std::string&    get_superclass() const { return super_class; }
   ClassPtr              get_parent() const { return parent; }
   const References&     get_references() const { return references; }
-  bool                  has_reference_to_node(const pugi::xml_node&) const;
   const Bindings&       get_bindings() const { return bindings; }
   const EventListeners& get_event_listeners() const { return event_listeners; }
   const Children&       get_slots() const { return slots; }
@@ -71,7 +70,7 @@ public:
 
   virtual void create_reference(pugi::xml_node element, Reference::Mode mode = Reference::UnspecifiedReferenceMode)
   {
-    if (!has_reference_to_node(element))
+    if (find_reference_for(element) == nullptr)
       references.push_back(std::make_shared<Reference>(element, this, mode));
   }
 
