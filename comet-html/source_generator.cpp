@@ -167,7 +167,7 @@ static void generate_event_listener_initializers(stringstream& stream, Class& ob
              << "  {" << endl
              << "    if (signal_name == \"" << event_listener->get_attribute_name() << "\")" << endl
              << "    {" << endl
-             << "      " << event_listener->get_code() << endl
+             << "      " << event_listener->get_code() << ';' << endl
              << "    }" << endl
              << "  });" << endl;
     }
@@ -213,7 +213,7 @@ static void generate_anchor_initializers(stringstream& stream, Class& object)
     if (slot_plugin.has_reference())
       stream << "root->" << slot_plugin.get_element().attribute("ref").value();
     else
-      stream << "std::make_shared<" << slot_plugin.get_typename() << ">(" << slot_plugin.constructor_params() << ");" << endl;
+      stream << "std::make_shared<" << slot_plugin.get_typename() << ">(" << slot_plugin.constructor_params() << ")" << endl;
     stream << ");" << endl;
   }
 }
