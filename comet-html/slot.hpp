@@ -34,7 +34,7 @@ class SlotPlugin : public SlotBase
 public:
   SlotPlugin(pugi::xml_node element, std::shared_ptr<Class> parent, pugi::xml_node on_element);
 
-  bool        implements_ibindable_view() const override { return is_custom_element(); }
+  bool        implements_ibindable_view() const override { return !is_custom_element(); }
   bool        is_custom_element() const { return Context::global.has_cpp_type(element); }
   bool        has_reference() const { return !element.attribute("ref").empty(); }
   std::string constructor_params() const { return "this"; }
