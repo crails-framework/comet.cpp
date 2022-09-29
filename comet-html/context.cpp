@@ -4,6 +4,8 @@
 
 Context Context::global;
 
+unsigned short Context::implicit_reference_count = 0;
+
 void Context::reset()
 {
   file_path = std::filesystem::path();

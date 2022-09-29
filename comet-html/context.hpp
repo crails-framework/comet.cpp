@@ -16,7 +16,7 @@ struct Context
   std::map<std::string, std::string>  element_types;
   std::vector<std::shared_ptr<Class>> classes;
   std::vector<std::string>            referenced_types;
-  unsigned short                      implicit_reference_count = 0;
+  static unsigned short               implicit_reference_count;
   unsigned short                      slot_count = 0;
   unsigned short                      repeater_count = 0;
 
