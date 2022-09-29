@@ -130,6 +130,7 @@ static int generate_template(const filesystem::path& output_folder, const filesy
 
         generator.prepare();
         generator.set_inline_code(inline_code);
+        filesystem::create_directories(filesystem::path(output_folder.string() + '/' + generator.compiled_header_path()).parent_path());
         success = success && write_file(output_folder.string() + '/' + generator.compiled_header_path(), generator.generate_header());
         success = success && write_file(output_folder.string() + '/' + generator.compiled_source_path(), generator.generate_source());
         if (!success) return 6;
@@ -165,7 +166,7 @@ static int generate_template(const filesystem::path& output_folder, const filesy
   return 0;
 }
 
-int main (int argc, char* argv[])
+int main(int argc, char* argv[])
 {
   using namespace std;
   auto options = get_options(argc, argv);
