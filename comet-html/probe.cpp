@@ -97,9 +97,7 @@ void Probe::probe_references(Class& object, const pugi::xml_node* root)
     else if (Context::global.has_cpp_type(element))
       object.create_reference(element, Reference::ImplicitReference);
     if (!Context::global.has_cpp_type(element))
-    {
       probe_references(object, &element);
-    }
   }
 }
 

@@ -69,11 +69,17 @@ protected:
 
 struct RemoteReference : public Reference
 {
-  RemoteReference(pugi::xml_node element, Class* parent, Mode mode = UnspecifiedReferenceMode) : Reference(element, parent, mode) {}
+  RemoteReference(pugi::xml_node element, Class* parent, std::shared_ptr<ReferenceBase> reference_to, Mode mode = UnspecifiedReferenceMode) : Reference(element, parent, mode), reference_to(reference_to)
+  {
+    if (reference_to == nullptr)
+      throw std::runtime_error("Probe error: created a RemoteReference that doesn't point to anything.");
+  }
   virtual ~RemoteReference() override {}
   std::string get_type() const override { return type + '&'; }
   bool has_initializer() const override { return true; }
-  std::string get_initializer(const std::string & root_getter) const override { return root_getter + "->" + name; }
+  std::string get_initializer(const std::string & root_getter) const override;
+
+  std::shared_ptr<ReferenceBase> reference_to;
 };
 
 struct ThisReference : public ReferenceBase

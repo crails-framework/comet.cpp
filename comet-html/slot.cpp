@@ -52,8 +52,16 @@ void SlotBase::create_reference(pugi::xml_node element, Reference::Mode mode)
     Class::create_reference(element, mode);
   else
   {
+    shared_ptr<RemoteReference> remote_reference;
+
     root_reference->create_reference(element, mode);
-    references.push_back(make_shared<RemoteReference>(element, this, mode));
+    remote_reference = make_shared<RemoteReference>(
+      element,
+      this,
+      root_reference->find_reference_for(element),
+      mode
+    );
+    references.push_back(remote_reference);
   }
 }
 

@@ -35,3 +35,10 @@ void Reference::set_mode(Mode mode)
     name = "element_" + parent->generate_new_reference_name();
   }
 }
+
+std::string RemoteReference::get_initializer(const std::string& root_getter) const
+{
+  if (reference_to == nullptr)
+    throw std::runtime_error("RemoteReference has null reference_to");
+  return root_getter + "->" + reference_to->get_name();
+}
