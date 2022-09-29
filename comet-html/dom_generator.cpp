@@ -38,7 +38,8 @@ string make_attrs_from_element(const pugi::xml_node& node)
     string name(attribute.name());
 
     if (find(reserved_keywords.begin(), reserved_keywords.end(), name) == reserved_keywords.end()
-      && sregex_iterator(name.begin(), name.end(), binding_pattern) == sregex_iterator())
+      && sregex_iterator(name.begin(), name.end(), binding_pattern) == sregex_iterator()
+      && name.substr(0, 5) != "cpp::")
     {
       if (i > 0) stream << ',';
       stream << "{\"" << attribute.name() << "\",\"" << attribute.value() << "\"}";
