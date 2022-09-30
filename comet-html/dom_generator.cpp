@@ -49,9 +49,15 @@ string make_attrs_from_element(const pugi::xml_node& node)
   return stream.str();
 }
 
-static void dom_anchorable_generator(std::stringstream& stream, Class& object, unsigned short depth)
+static void dom_anchorable_generator(std::stringstream& stream, Class& object, Class& context, unsigned short depth)
 {
-  stream << endl << indent(depth) << object.get_anchor_name();
+  string prefix = "";
+
+  if (object.get_parent() == context.root())
+    prefix = "root->";
+  // else if (object.get_parent().get() != &context)
+  // TODO: mayhaps try to find a path to reach the anchorable actual container
+  stream << endl << indent(depth) << prefix << object.get_anchor_name();
 }
 
 static void dom_element_generator(stringstream& stream, const pugi::xml_node& node, Class& object, unsigned short depth)
@@ -86,13 +92,13 @@ void dom_generator(stringstream& stream, const pugi::xml_node& node, Class& obje
 
   for (const pugi::xml_node& child : node.children())
   {
-    shared_ptr<Class>       sub_object = object.find_class_for(child);
+    shared_ptr<Class>       sub_object = object.root()->find_class_for(child);
     DomGenerators::iterator generator = dom_generators.find(child.type());
 
     if (generator == dom_generators.end()) continue ;
     if (count++ > 0) stream << ',';
     if (sub_object && sub_object->is_anchorable())
-      dom_anchorable_generator(stream, *sub_object, depth);
+      dom_anchorable_generator(stream, *sub_object, object, depth);
     else
       (*generator->second)(stream, child, object, depth);
   }

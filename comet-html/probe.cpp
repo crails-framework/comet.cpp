@@ -8,10 +8,11 @@
 
 using namespace std;
 
+static const string cpp_class_attribute("_cheerp_class");
 static bool is_slot       (const pugi::xml_node& element) { return element.name() == string("slot"); }
 static bool is_slot_plugin(const pugi::xml_node& element) { return !element.attribute("slot").empty(); }
 static bool is_repeater   (const pugi::xml_node& element) { return !element.attribute("repeat.for").empty(); }
-static bool has_cpp_class_attribute(const pugi::xml_node& element) { return !element.attribute("_cheerp_class").empty(); }
+static bool has_cpp_class_attribute(const pugi::xml_node& element) { return !element.attribute(cpp_class_attribute.c_str()).empty(); }
 
 void Probe::probe(Class& object)
 {
@@ -67,12 +68,13 @@ void Probe::probe_slots_plugins(Class& object, const pugi::xml_node* root)
     if (has_cpp_class_attribute(element)) continue ;
     if (Context::global.has_cpp_type(element))
     {
-      for (const pugi::xml_node& candidate : element.children())
+      for (pugi::xml_node& candidate : element.children())
       {
-        if (is_slot_plugin(candidate))
+        if (is_slot_plugin(candidate) && !has_cpp_class_attribute(candidate))
         {
           auto slot_plugin = Context::make<SlotPlugin>(candidate, object.shared_from_this(), element);
 
+          candidate.append_attribute(cpp_class_attribute.c_str()).set_value(slot_plugin->get_typename().c_str());
           object.slot_plugins.push_back(slot_plugin);
           probe(*slot_plugin);
         }

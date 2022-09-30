@@ -33,14 +33,14 @@ static std::string tag_name_for(Class& object)
   return object.get_element().name();
 }
 
-static std::string get_root_from_parent_code(Class& object)
+static std::string get_path_of_parents_until(const Class& object, std::function<bool(const Class&)> function)
 {
-  if (!object.is_root())
+  if (!function(object))
   {
     auto   current_object = object.get_parent();
     string result(parent_symbol);
 
-    while (!current_object->is_root())
+    while (!function(*current_object))
     {
       result += "->parent";
       current_object = current_object->get_parent();
@@ -50,10 +50,26 @@ static std::string get_root_from_parent_code(Class& object)
   return "this";
 }
 
+static std::string get_root_from_parent_code(const Class& object)
+{
+  return get_path_of_parents_until(object, [](const Class& entry) { return entry.is_root(); });
+}
+
+static std::string get_reference_holder_from_parent_code(const Class& object)
+{
+  return get_path_of_parents_until(object, [](const Class& entry) { return entry.blocks_remote_references(); });
+}
+
+static std::string get_parent_from_parent_code(const Class& object)
+{
+  return get_path_of_parents_until(object, [&object](const Class& entry) { return &entry == &object; });
+}
+
 static list<string> initializers_for(Class& object)
 {
   list<string> initializers;
   string root_getter = get_root_from_parent_code(object);
+  string reference_holder_getter = get_reference_holder_from_parent_code(object);
 
   if (object.get_superclass() == Context::global.template_base_type())
     initializers.push_back(object.get_superclass() + "(\"" + tag_name_for(object) + "\")");
@@ -61,7 +77,7 @@ static list<string> initializers_for(Class& object)
   for (const auto& reference : object.get_references())
   {
     if (reference->has_initializer())
-      initializers.push_back(reference->get_name() + '(' + reference->get_initializer(root_getter) + ')');
+      initializers.push_back(reference->get_name() + '(' + reference->get_initializer(reference_holder_getter) + ')');
   }
   if (!object.is_root())
   {
@@ -73,7 +89,7 @@ static list<string> initializers_for(Class& object)
     for (const auto& slot_ : object.get_slots())
     {
       const Slot& slot = reinterpret_cast<const Slot&>(*slot_.get());
-      initializers.push_back(slot.get_slot_ref() + '(' + root_getter + "->" + slot.get_slot_ref() + ')');
+      initializers.push_back(slot.get_slot_ref() + '(' + reference_holder_getter + "->" + slot.get_slot_ref() + ')');
     }
   }
   return initializers;
@@ -191,6 +207,8 @@ static void generate_dom_constructor(stringstream& stream, Class& object)
 
 static void generate_anchor_initializers(stringstream& stream, Class& object)
 {
+  string reference_holder_getter = get_reference_holder_from_parent_code(object);
+
   for (const auto& repeater_ : object.get_repeaters())
   {
     const Repeater& repeater = reinterpret_cast<const Repeater&>(*repeater_.get());
@@ -201,8 +219,8 @@ static void generate_anchor_initializers(stringstream& stream, Class& object)
   {
     const Slot& slot = reinterpret_cast<const Slot&>(*slot_.get());
 
-    stream << "  " << slot.get_slot_ref() << ".set_anchor(" << slot.get_anchor_name() << ", " << anchor_symbols.at(AppendAnchor) << ");" << endl;
-    stream << "  " << slot.get_slot_ref() << ".set_element(std::make_shared<" << slot.get_typename() << ">(this));" << endl;
+    stream << "  " << slot.get_slot_ref() << ".set_anchor(" + reference_holder_getter + "->" << slot.get_anchor_name() << ", " << anchor_symbols.at(AppendAnchor) << ");" << endl;
+    stream << "  " << slot.get_slot_ref() << ".set_element(std::make_shared<" << slot.get_typename() << ">(" + reference_holder_getter + "));" << endl;
   }
   for (const auto& slot_plugin_ : object.get_slot_plugins())
   {
@@ -211,9 +229,9 @@ static void generate_anchor_initializers(stringstream& stream, Class& object)
 
     stream << "  " << reference->get_name() << ".slot_" << slot_plugin.get_slot_name() << ".set_element(";
     if (slot_plugin.has_reference())
-      stream << "root->" << slot_plugin.get_element().attribute("ref").value();
+      stream << reference_holder_getter << "->" << slot_plugin.get_element().attribute("ref").value();
     else
-      stream << "std::make_shared<" << slot_plugin.get_typename() << ">(" << slot_plugin.constructor_params() << ")" << endl;
+      stream << "std::make_shared<" << slot_plugin.get_typename() << ">(" << get_parent_from_parent_code(slot_plugin) << ")";
     stream << ");" << endl;
   }
 }
@@ -241,7 +259,7 @@ static void generate_method_bind_attributes(stringstream& stream, Class& object)
     stream << "  bound_attributes.enable(signaler);" << endl;
   for (const auto& reference : object.get_references())
   {
-    if (reference->get_element().type() != pugi::node_null && Context::global.has_cpp_type(reference->get_element()))
+    if (reference->get_element().type() != pugi::node_null && Context::global.has_registered_cpp_type(reference->get_element()))
     {
       stream << "  " << reference->get_name() << ".bind_attributes();" << endl;
       stream << "  " << "signaler.connect([this](std::string _event) { " << reference->get_name() << ".signaler.trigger(_event); });" << endl;
@@ -268,7 +286,7 @@ static void generate_method_trigger_binding_updates(stringstream& stream, Class&
     stream << "  " << "bound_attributes.update();" << endl;
   for (const auto& reference : object.get_references())
   {
-    if (reference->get_element().type() != pugi::node_null && Context::global.has_cpp_type(reference->get_element()))
+    if (reference->get_element().type() != pugi::node_null && Context::global.has_registered_cpp_type(reference->get_element()))
       stream << "  " << reference->get_name() << ".trigger_binding_updates();" << endl;
   }
   for (const auto& repeater : object.get_repeaters())

@@ -45,7 +45,7 @@ public:
   virtual bool          is_anchorable() const { return false; }
   virtual bool          is_repeater() const { return false; }
   virtual bool          should_skip() const { return false; }
-  virtual bool          blocks_remote_references() const { return false; }
+  virtual bool          blocks_remote_references() const { return is_root(); }
   virtual bool          implements_ibindable_view() const { return false; }
   bool                  inherits_binding_methods() const;
   virtual std::string   constructor_declaration() const;
