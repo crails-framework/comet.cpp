@@ -11,6 +11,7 @@
 #include <boost/json.hpp>
 #include <boost/program_options.hpp>
 #include <crails/read_file.hpp>
+#include <crails/cli/filesystem.hpp>
 #include <filesystem>
 
 using namespace std;
@@ -22,8 +23,6 @@ bool is_valid_cpp_variable_name(const std::string& value)
   return false;
 }
 
-// filesystem.cpp
-bool write_file(const string& filepath, const string& contents);
 // options.cpp
 boost::program_options::options_description options_description();
 boost::program_options::variables_map       get_options(int argc, char** argv);
@@ -131,8 +130,8 @@ static int generate_template(const filesystem::path& output_folder, const filesy
         generator.prepare();
         generator.set_inline_code(inline_code);
         filesystem::create_directories(filesystem::path(output_folder.string() + '/' + generator.compiled_header_path()).parent_path());
-        success = success && write_file(output_folder.string() + '/' + generator.compiled_header_path(), generator.generate_header());
-        success = success && write_file(output_folder.string() + '/' + generator.compiled_source_path(), generator.generate_source());
+        success = success && Crails::write_file("comet-html", output_folder.string() + '/' + generator.compiled_header_path(), generator.generate_header());
+        success = success && Crails::write_file("comet-html", output_folder.string() + '/' + generator.compiled_source_path(), generator.generate_source());
         if (!success) return 6;
       }
       else

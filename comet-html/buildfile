@@ -2,6 +2,7 @@ import libs += pugixml%lib{pugixml}
 import libs += libboost-program-options%lib{boost_program_options}
 import libs += libboost-json%lib{boost_json}
 import libs += libcrails-readfile%lib{crails-readfile}
+import libs += libcrails-cli%lib{crails-cli}
 import libs += libcrails-semantics%lib{crails-semantics}
 
 exe{comet-html}: {hxx ixx txx cxx}{**} $libs testscript
