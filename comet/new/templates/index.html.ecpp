@@ -1,0 +1,8 @@
+<html>
+  <head>
+    <title>Comet Application</title>
+    <script src="build/application.js"></script>
+  </head>
+  <body>
+  </body>
+</html>

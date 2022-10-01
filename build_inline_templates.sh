@@ -21,7 +21,11 @@ $ECPP \
 $ECPP \
   -n ProjectApplicationHpp \
   -i $PROJECT_TPL/application.hpp.ecpp \
-  >  $PROJECT_TPL/build/exception.html.cpp
+  >  $PROJECT_TPL/build/application.cpp.cpp
+$ECPP \
+  -n ProjectIndexHtml \
+  -i $PROJECT_TPL/index.html.ecpp \
+  >  $PROJECT_TPL/build/index.html.cpp
 $ECPP \
   -n ProjectConfigJson \
   -i $PROJECT_TPL/config.json.ecpp \

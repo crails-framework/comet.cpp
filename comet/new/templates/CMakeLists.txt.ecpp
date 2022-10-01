@@ -13,7 +13,7 @@ vector<string>& @external_sources;
 cmake_minimum_required(VERSION 3.0)
 
 project(<%= project_name %>)
-include_directories(/usr/local/include <%= generated_files_dir %>)
+include_directories(/usr/local/include . <%= generated_files_dir %>)
 link_directories(/usr/local/lib/genericjs /usr/lib/genericjs)
 
 set(CMAKE_CXX_FLAGS "-target cheerp-genericjs -fexceptions -D__CHEERP_CLIENT__ -D__COMET_CLIENT__")

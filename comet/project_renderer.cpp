@@ -10,6 +10,7 @@ declare_renderer(project_cmakelists_txt)
 declare_renderer(project_main_cpp)
 declare_renderer(project_routes_cpp)
 declare_renderer(project_application_hpp)
+declare_renderer(project_index_html)
 declare_renderer(project_config_json)
 declare_renderer(scaffold_layout_html)
 declare_renderer(scaffold_layout_hpp)
@@ -26,6 +27,7 @@ ProjectRenderer::ProjectRenderer()
   add_renderer("main.cpp",        project_main_cpp);
   add_renderer("routes.cpp",      project_routes_cpp);
   add_renderer("application.hpp", project_application_hpp);
+  add_renderer("index.html",      project_index_html);
   add_renderer("config.json",     project_config_json);
 
   add_renderer("scaffolds/controller.hpp", scaffold_controller_hpp);

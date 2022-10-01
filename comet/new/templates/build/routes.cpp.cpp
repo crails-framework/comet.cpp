@@ -11,7 +11,7 @@ public:
 
   std::string render()
   {
-ecpp_stream << "#include <comet/router.hpp>\n\nusing namespace Comet;\n\nvoid Router::initialize()\n{\n}\n";
+ecpp_stream << "#include <comet/router.hpp>\n#include <comet/globals.hpp>\n\nusing namespace Comet;\n\nvoid Router::initialize()\n{\n}\n";
     return ecpp_stream.str();
   }
 private:
