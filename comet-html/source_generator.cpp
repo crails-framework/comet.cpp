@@ -143,6 +143,10 @@ static void generate_binding_initializers(stringstream& stream, Class& object)
            << "Comet::Bindable(";
     if (binding->binds_to_cpp_property())
       stream << "[this]() { " << reference->get_name() << ".set_" << binding->get_attribute_name() << '(' << binding->get_code() << "); }";
+    else if (binding->get_attribute_name() == "checked")
+      stream << "[this]() { " << reference->get_name() << ".checked(" << binding->get_code() << "); }";
+    else if (binding->get_attribute_name() == "selected")
+      stream << "[this]() { " << reference->get_name() << ".selected(" << binding->get_code() << "); }";
     else if (binding->get_attribute_name() == "show")
       stream << "[this]() { " << reference->get_name() << ".visible(" << binding->get_code() << "); }";
     else if (binding->get_attribute_name() == "text")
