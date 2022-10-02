@@ -14,3 +14,11 @@ location: https://github.com/crails-framework/libcrails-readfile.git#master
 :
 role: prerequisite
 location: https://github.com/crails-framework/libcrails-renderer.git#master
+
+:
+role: prerequisite
+location: https://github.com/crails-framework/libcrails-templates.git#master
+
+:
+role: prerequisite
+location: https://github.com/crails-framework/libcrails-cli.git#master
