@@ -10,7 +10,8 @@ boost::program_options::options_description options_description()
     ("help,h", "produce help message")
     ("input,i",  boost::program_options::value<std::string>(), "input folder")
     ("output,o", boost::program_options::value<std::string>(), "output folder")
-    ("config,c", boost::program_options::value<std::string>(), "config file");
+    ("config,c", boost::program_options::value<std::string>(), "config file")
+    ("verbose,v", "enable verbose mode");
   return desc;
 }
 

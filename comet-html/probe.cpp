@@ -37,7 +37,7 @@ void Probe::probe(Repeater& object)
 void Probe::probe_subtypes(Class& object, const pugi::xml_node* root)
 {
   if (!root) root = &object.element;
-  for (const pugi::xml_node& element : root->children())
+  for (pugi::xml_node& element : root->children())
   {
     if (Context::global.has_cpp_type(element))
       Context::global.use_cpp_type(element.name());
@@ -52,6 +52,7 @@ void Probe::probe_subtypes(Class& object, const pugi::xml_node* root)
     {
       auto repeater = Context::make<Repeater>(element, object.shared_from_this());
 
+      element.append_attribute(cpp_class_attribute.c_str()).set_value(repeater->get_typename().c_str());
       object.repeaters.push_back(repeater);
       probe(*repeater);
     }

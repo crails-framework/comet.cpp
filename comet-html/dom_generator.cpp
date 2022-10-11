@@ -3,6 +3,7 @@
 #include <sstream>
 #include <map>
 #include <regex>
+#include <iostream>
 #include "class.hpp"
 
 using namespace std;
@@ -56,8 +57,18 @@ static void dom_anchorable_generator(std::stringstream& stream, Class& object, C
 
   if (object.get_parent() == context.root())
     prefix = "root->";
-  // else if (object.get_parent().get() != &context)
-  // TODO: mayhaps try to find a path to reach the anchorable actual container
+  else if (object.get_parent().get() != &context)
+  {
+    auto parent = object.get_parent();
+
+    prefix = "parent->";
+    do { prefix = "parent->"; } while ((parent = parent->get_parent()) != nullptr);
+    if (parent == nullptr)
+    {
+      cerr << "/!\\ couldn't find parent element for anchorable element: " << object.get_element() << endl;
+      throw runtime_error("invalid dom_anchorable_generator");
+    }
+  }
   stream << endl << indent(depth) << prefix << object.get_anchor_name();
 }
 
@@ -87,13 +98,33 @@ static void dom_text_generator(stringstream& stream, const pugi::xml_node& node,
   stream << endl << indent(depth) << "Comet::Element(\"span\").text(" << boost::json::serialize(text) << ')';
 }
 
+static shared_ptr<Class> get_subobject_for(Class& object, const pugi::xml_node& child)
+{
+  shared_ptr<Class> sub_object = object.root()->find_class_for(child);
+
+  if (!sub_object)
+    sub_object = object.find_class_for(child);
+  if (!sub_object)
+  {
+    shared_ptr<Class> parent = object.get_parent();
+
+    while (parent)
+    {
+      if ((sub_object = parent->find_class_for(child)) != nullptr)
+        break ;
+      parent = parent->get_parent();
+    }
+  }
+  return sub_object;
+}
+
 void dom_generator(stringstream& stream, const pugi::xml_node& node, Class& object, unsigned short depth)
 {
   unsigned short count = 0;
 
   for (const pugi::xml_node& child : node.children())
   {
-    shared_ptr<Class>       sub_object = object.root()->find_class_for(child);
+    shared_ptr<Class>       sub_object = get_subobject_for(object, child);
     DomGenerators::iterator generator = dom_generators.find(child.type());
 
     if (generator == dom_generators.end()) continue ;
