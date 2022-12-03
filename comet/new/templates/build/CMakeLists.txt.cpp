@@ -1,4 +1,5 @@
 #include <sstream>
+#include "crails/render_target.hpp"
 #include "crails/shared_vars.hpp"
 #include "crails/template.hpp"
 #include <vector>
@@ -7,8 +8,8 @@ using namespace std;
 class ProjectCmakelistsTxt : public Crails::Template
 {
 public:
-  ProjectCmakelistsTxt(const Crails::Renderer* renderer, Crails::SharedVars& vars) :
-    Crails::Template(renderer, vars), 
+  ProjectCmakelistsTxt(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
+    Crails::Template(renderer, target, vars), 
     project_name(Crails::cast<string>(vars, "project_name")), 
     output_name(Crails::cast<string>(vars, "output_name",  "application")), 
     rpath(Crails::cast<string>(vars, "rpath",  "/usr/local/lib/genericjs")), 
@@ -16,7 +17,7 @@ public:
     external_sources(reinterpret_cast<vector<string>&>(*Crails::cast<vector<string>*>(vars, "external_sources")))
   {}
 
-  std::string render()
+  void render()
   {
 ecpp_stream << "# runs with the following option:\n# -DCMAKE_TOOLCHAIN_FILE \"$CHEERP_PATH/share/cmake/Modules/CheerpToolchain.cmake\"\n\ncmake_minimum_required(VERSION 3.0)\n\nproject(" << ( project_name );
   ecpp_stream << ")\ninclude_directories(/usr/local/include . " << ( generated_files_dir );
@@ -31,7 +32,7 @@ ecpp_stream << "# runs with the following option:\n# -DCMAKE_TOOLCHAIN_FILE \"$C
   ecpp_stream << "/*.cxx\n)\n\nadd_executable(" << ( output_name );
   ecpp_stream << " ${app_src})\n\ntarget_link_libraries(" << ( output_name );
   ecpp_stream << "\n  crails-semantics\n  comet\n)\n";
-    return ecpp_stream.str();
+    this->target.set_body(ecpp_stream.str());
   }
 private:
   std::stringstream ecpp_stream;
@@ -42,7 +43,7 @@ private:
   vector<string>& external_sources;
 };
 
-std::string render_project_cmakelists_txt(const Crails::Renderer* renderer, Crails::SharedVars& vars)
+void render_project_cmakelists_txt(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars)
 {
-  return ProjectCmakelistsTxt(renderer, vars).render();
+  ProjectCmakelistsTxt(renderer, target, vars).render();
 }

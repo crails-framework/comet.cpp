@@ -1,4 +1,5 @@
 #include <sstream>
+#include "crails/render_target.hpp"
 #include "crails/shared_vars.hpp"
 #include "crails/template.hpp"
 #include <map>
@@ -7,12 +8,12 @@ using namespace std;
 class ScaffoldViewHtml : public Crails::Template
 {
 public:
-  ScaffoldViewHtml(const Crails::Renderer* renderer, Crails::SharedVars& vars) :
-    Crails::Template(renderer, vars), 
+  ScaffoldViewHtml(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
+    Crails::Template(renderer, target, vars), 
     properties(reinterpret_cast<map<string,string>&>(*Crails::cast<map<string,string>*>(vars, "properties")))
   {}
 
-  std::string render()
+  void render()
   {
 ecpp_stream << "<template>";
  if (properties.size() > 0){
@@ -25,14 +26,14 @@ ecpp_stream << "<template>";
   ecpp_stream << "\n  </head>";
  };
   ecpp_stream << "\n  <body>\n  </body>\n</template>\n";
-    return ecpp_stream.str();
+    this->target.set_body(ecpp_stream.str());
   }
 private:
   std::stringstream ecpp_stream;
   map<string,string>& properties;
 };
 
-std::string render_scaffold_view_html(const Crails::Renderer* renderer, Crails::SharedVars& vars)
+void render_scaffold_view_html(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars)
 {
-  return ScaffoldViewHtml(renderer, vars).render();
+  ScaffoldViewHtml(renderer, target, vars).render();
 }

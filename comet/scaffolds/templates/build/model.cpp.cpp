@@ -1,4 +1,5 @@
 #include <sstream>
+#include "crails/render_target.hpp"
 #include "crails/shared_vars.hpp"
 #include "crails/template.hpp"
 #include <algorithm>
@@ -7,14 +8,14 @@ using namespace std;
 class ScaffoldModelCpp : public Crails::Template
 {
 public:
-  ScaffoldModelCpp(const Crails::Renderer* renderer, Crails::SharedVars& vars) :
-    Crails::Template(renderer, vars), 
+  ScaffoldModelCpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
+    Crails::Template(renderer, target, vars), 
     filename(Crails::cast<string>(vars, "filename")), 
     classname(Crails::cast<string>(vars, "classname")), 
     properties(Crails::cast<map<string, string>>(vars, "properties"))
   {}
 
-  std::string render()
+  void render()
   {
 ecpp_stream << "#pragma once\n#include \"" << ( filename );
   ecpp_stream << ".hpp\"\n#include <sstream>\n\nusing namespace std;\n\nstring " << ( classname );
@@ -42,7 +43,7 @@ ecpp_stream << "#pragma once\n#include \"" << ( filename );
   ecpp_stream << "\"]);";
  };
   ecpp_stream << "\n}\n";
-    return ecpp_stream.str();
+    this->target.set_body(ecpp_stream.str());
   }
 private:
   std::stringstream ecpp_stream;
@@ -51,7 +52,7 @@ private:
   map<string, string> properties;
 };
 
-std::string render_scaffold_model_cpp(const Crails::Renderer* renderer, Crails::SharedVars& vars)
+void render_scaffold_model_cpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars)
 {
-  return ScaffoldModelCpp(renderer, vars).render();
+  ScaffoldModelCpp(renderer, target, vars).render();
 }

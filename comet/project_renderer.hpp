@@ -10,7 +10,6 @@ public:
   void render_template(const std::string& view, Crails::RenderTarget& target, Crails::SharedVars& vars) const override
   {
     auto tpl    = templates.find(view);
-    auto result = (*tpl).second(this, vars);
-    target.set_body(result.c_str(), result.length());
+    (*tpl).second(*this, target, vars);
   }
 };

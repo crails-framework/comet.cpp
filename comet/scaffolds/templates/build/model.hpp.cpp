@@ -1,4 +1,5 @@
 #include <sstream>
+#include "crails/render_target.hpp"
 #include "crails/shared_vars.hpp"
 #include "crails/template.hpp"
 #include <algorithm>
@@ -7,14 +8,14 @@ using namespace std;
 class ScaffoldModelHpp : public Crails::Template
 {
 public:
-  ScaffoldModelHpp(const Crails::Renderer* renderer, Crails::SharedVars& vars) :
-    Crails::Template(renderer, vars), 
+  ScaffoldModelHpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
+    Crails::Template(renderer, target, vars), 
     classname(Crails::cast<string>(vars, "classname")), 
     properties(Crails::cast<map<string, string>>(vars, "properties")), 
     scalar_types( {"bool","char","unsigned char","char16_t","char32_t","wchar_t","signed char","int","unsigned int","short","unsigned short","long","long long","unsigned long","unsigned long long","double","long double","float","std::size_t","std::time_t"})
   {}
 
-  std::string render()
+  void render()
   {
 ecpp_stream << "#pragma once\n#include <crails/mvc/model.hpp>\n\nclass " << ( classname );
   ecpp_stream << " : public Comet::JsonModel\n{\npublic:\n  std::string get_url() const override;\n  std::string to_json() const override;\n  void from_json(Data) override;\n";
@@ -55,7 +56,7 @@ ecpp_stream << "#pragma once\n#include <crails/mvc/model.hpp>\n\nclass " << ( cl
   ecpp_stream << ";";
  };
   ecpp_stream << "\n};\n";
-    return ecpp_stream.str();
+    this->target.set_body(ecpp_stream.str());
   }
 private:
   std::stringstream ecpp_stream;
@@ -64,7 +65,7 @@ private:
   vector<string> scalar_types;
 };
 
-std::string render_scaffold_model_hpp(const Crails::Renderer* renderer, Crails::SharedVars& vars)
+void render_scaffold_model_hpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars)
 {
-  return ScaffoldModelHpp(renderer, vars).render();
+  ScaffoldModelHpp(renderer, target, vars).render();
 }

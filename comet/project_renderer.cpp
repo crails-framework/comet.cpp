@@ -1,6 +1,6 @@
 #include "project_renderer.hpp"
 #define declare_renderer(name) \
-  std::string render_##name(const Crails::Renderer*, Crails::SharedVars&);
+  void render_##name(const Crails::Renderer&, Crails::RenderTarget&, Crails::SharedVars&);
 #define add_renderer(path, name) \
   templates.insert(pair<string, Generator>(path, render_##name))
 
