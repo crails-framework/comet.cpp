@@ -188,7 +188,16 @@ int main(int argc, char* argv[])
       return -2;
     }
     if (options.count("config"))
-      config = load_config(options["config"].as<std::string>());
+    {
+      try
+      {
+        config = load_config(options["config"].as<string>());
+      }
+      catch (const std::exception& err)
+      {
+        cerr << "failed to load config file " << options["config"].as<string>() << ": " << err.what() << endl;
+      }
+    }
     collect_template_files(input_folder, html_templates);
     Context::global.input_folder = input_folder;
     for (const auto& template_path : html_templates)
