@@ -8,8 +8,6 @@
 
 using namespace std;
 
-const string Crails::Renderer::default_format = "*";
-
 class Index : public Crails::CommandIndex
 {
 public:
