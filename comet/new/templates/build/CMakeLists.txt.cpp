@@ -5,10 +5,10 @@
 #include <vector>
 using namespace std;
 
-class ProjectCmakelistsTxt : public Crails::Template
+class render_ProjectCmakelistsTxt : public Crails::Template
 {
 public:
-  ProjectCmakelistsTxt(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
+  render_ProjectCmakelistsTxt(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
     project_name(Crails::cast<string>(vars, "project_name")), 
     output_name(Crails::cast<string>(vars, "output_name",  "application")), 
@@ -19,7 +19,7 @@ public:
 
   void render()
   {
-ecpp_stream << "# runs with the following option:\n# -DCMAKE_TOOLCHAIN_FILE \"$CHEERP_PATH/share/cmake/Modules/CheerpToolchain.cmake\"\n\ncmake_minimum_required(VERSION 3.0)\n\nproject(" << ( project_name );
+ecpp_stream << "# runs with the following option:\n# -DCMAKE_TOOLCHAIN_FILE \"$CHEERP_PATH/share/cmake/Modules/CheerpToolchain.cmake\"\n\ncmake_minimum_required(VERSION 3.5)\n\nproject(" << ( project_name );
   ecpp_stream << ")\ninclude_directories(/usr/local/include . " << ( generated_files_dir );
   ecpp_stream << ")\nlink_directories(/usr/local/lib/genericjs /usr/lib/genericjs)\n\nset(CMAKE_CXX_FLAGS \"-target cheerp-genericjs -fexceptions -D__CHEERP_CLIENT__ -D__COMET_CLIENT__\")\nset(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} -Wall -Wno-unknown-pragmas -pedantic\")\n\nif (CMAKE_BUILD_TYPE EQUAL \"DEBUG\")\n  set(CMAKE_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS}\" -cheerp-sourcemap=" << ( output_name );
   ecpp_stream << ".js.map -cheerp-sourcemap-standalone)\nendif()\n\nfile(GLOB_RECURSE app_src\n  *.cpp *.cxx";
@@ -31,8 +31,10 @@ ecpp_stream << "# runs with the following option:\n# -DCMAKE_TOOLCHAIN_FILE \"$C
   ecpp_stream << "/*.cpp " << ( generated_files_dir );
   ecpp_stream << "/*.cxx\n)\n\nadd_executable(" << ( output_name );
   ecpp_stream << " ${app_src})\n\ntarget_link_libraries(" << ( output_name );
-  ecpp_stream << "\n  crails-semantics\n  comet\n)\n";
-    this->target.set_body(ecpp_stream.str());
+  ecpp_stream << ".js\n  crails-semantics\n  comet\n)\n";
+    std::string _out_buffer = ecpp_stream.str();
+    _out_buffer = this->apply_post_render_filters(_out_buffer);
+    this->target.set_body(_out_buffer);
   }
 private:
   std::stringstream ecpp_stream;
@@ -45,5 +47,5 @@ private:
 
 void render_project_cmakelists_txt(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars)
 {
-  ProjectCmakelistsTxt(renderer, target, vars).render();
+  render_ProjectCmakelistsTxt(renderer, target, vars).render();
 }

@@ -5,10 +5,10 @@
 #include <map>
 using namespace std;
 
-class ScaffoldViewHtml : public Crails::Template
+class render_ScaffoldViewHtml : public Crails::Template
 {
 public:
-  ScaffoldViewHtml(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
+  render_ScaffoldViewHtml(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
     properties(reinterpret_cast<map<string,string>&>(*Crails::cast<map<string,string>*>(vars, "properties")))
   {}
@@ -26,7 +26,9 @@ ecpp_stream << "<template>";
   ecpp_stream << "\n  </head>";
  };
   ecpp_stream << "\n  <body>\n  </body>\n</template>\n";
-    this->target.set_body(ecpp_stream.str());
+    std::string _out_buffer = ecpp_stream.str();
+    _out_buffer = this->apply_post_render_filters(_out_buffer);
+    this->target.set_body(_out_buffer);
   }
 private:
   std::stringstream ecpp_stream;
@@ -35,5 +37,5 @@ private:
 
 void render_scaffold_view_html(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars)
 {
-  ScaffoldViewHtml(renderer, target, vars).render();
+  render_ScaffoldViewHtml(renderer, target, vars).render();
 }

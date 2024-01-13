@@ -26,7 +26,7 @@ private:
   {
     Crails::RenderFile render_target;
 
-    if (renderer.can_render("", template_name.data()))
+    if (renderer.can_render(std::string(template_name)))
     {
       if (Crails::require_folder("DIR", path.string()))
       {

@@ -5,10 +5,10 @@
 #include <algorithm>
 using namespace std;
 
-class ScaffoldModelHpp : public Crails::Template
+class render_ScaffoldModelHpp : public Crails::Template
 {
 public:
-  ScaffoldModelHpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
+  render_ScaffoldModelHpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
     classname(Crails::cast<string>(vars, "classname")), 
     properties(Crails::cast<map<string, string>>(vars, "properties")), 
@@ -56,7 +56,9 @@ ecpp_stream << "#pragma once\n#include <crails/mvc/model.hpp>\n\nclass " << ( cl
   ecpp_stream << ";";
  };
   ecpp_stream << "\n};\n";
-    this->target.set_body(ecpp_stream.str());
+    std::string _out_buffer = ecpp_stream.str();
+    _out_buffer = this->apply_post_render_filters(_out_buffer);
+    this->target.set_body(_out_buffer);
   }
 private:
   std::stringstream ecpp_stream;
@@ -67,5 +69,5 @@ private:
 
 void render_scaffold_model_hpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars)
 {
-  ScaffoldModelHpp(renderer, target, vars).render();
+  render_ScaffoldModelHpp(renderer, target, vars).render();
 }

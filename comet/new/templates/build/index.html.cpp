@@ -3,17 +3,19 @@
 #include "crails/shared_vars.hpp"
 #include "crails/template.hpp"
 
-class ProjectIndexHtml : public Crails::Template
+class render_ProjectIndexHtml : public Crails::Template
 {
 public:
-  ProjectIndexHtml(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
+  render_ProjectIndexHtml(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars)
   {}
 
   void render()
   {
 ecpp_stream << "<html>\n  <head>\n    <title>Comet Application</title>\n    <script src=\"build/application.js\"></script>\n  </head>\n  <body>\n  </body>\n</html>\n";
-    this->target.set_body(ecpp_stream.str());
+    std::string _out_buffer = ecpp_stream.str();
+    _out_buffer = this->apply_post_render_filters(_out_buffer);
+    this->target.set_body(_out_buffer);
   }
 private:
   std::stringstream ecpp_stream;
@@ -21,5 +23,5 @@ private:
 
 void render_project_index_html(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars)
 {
-  ProjectIndexHtml(renderer, target, vars).render();
+  render_ProjectIndexHtml(renderer, target, vars).render();
 }

@@ -4,10 +4,10 @@
 #include "crails/template.hpp"
 using namespace std;
 
-class ScaffoldViewHpp : public Crails::Template
+class render_ScaffoldViewHpp : public Crails::Template
 {
 public:
-  ScaffoldViewHpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
+  render_ScaffoldViewHpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
     classname(Crails::cast<string>(vars, "classname")), 
     element(Crails::cast<string>(vars, "element")), 
@@ -20,7 +20,9 @@ ecpp_stream << "#pragma once\n#include \"" << ( include );
   ecpp_stream << "\"\n\nclass " << ( classname );
   ecpp_stream << " : public " << ( element );
   ecpp_stream << "\n{\n};\n";
-    this->target.set_body(ecpp_stream.str());
+    std::string _out_buffer = ecpp_stream.str();
+    _out_buffer = this->apply_post_render_filters(_out_buffer);
+    this->target.set_body(_out_buffer);
   }
 private:
   std::stringstream ecpp_stream;
@@ -31,5 +33,5 @@ private:
 
 void render_scaffold_view_hpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars)
 {
-  ScaffoldViewHpp(renderer, target, vars).render();
+  render_ScaffoldViewHpp(renderer, target, vars).render();
 }
