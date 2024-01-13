@@ -39,3 +39,9 @@ ProjectRenderer::ProjectRenderer()
   add_renderer("scaffolds/layout.html",    scaffold_layout_html);
   add_renderer("scaffolds/layout.hpp",     scaffold_layout_hpp);
 }
+
+const vector<string>& ProjectRenderer::get_mimetypes() const
+{
+  static const vector<string> meep{};
+  return meep;
+}
