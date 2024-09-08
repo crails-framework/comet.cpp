@@ -6,6 +6,7 @@ class ProjectRenderer : public Crails::Renderer
 {
 public:
   ProjectRenderer();
+  std::string_view get_name() const override { return "comet/ProjectRenderer"; }
   const std::vector<std::string>& get_mimetypes() const override;
   void render_template(const std::string& view, Crails::RenderTarget& target, Crails::SharedVars& vars) const override
   {
