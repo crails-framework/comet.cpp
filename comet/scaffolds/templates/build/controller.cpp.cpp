@@ -8,8 +8,8 @@ class render_ScaffoldControllerCpp : public Crails::Template
 public:
   render_ScaffoldControllerCpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
-    filename(Crails::cast<std::string>(vars, "filename")), 
-    classname(Crails::cast<std::string>(vars, "classname"))
+    filename(Crails::cast< std::string >(vars, "filename")), 
+    classname(Crails::cast< std::string >(vars, "classname"))
   {}
 
   void render()

@@ -10,11 +10,11 @@ class render_ProjectCmakelistsTxt : public Crails::Template
 public:
   render_ProjectCmakelistsTxt(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
-    project_name(Crails::cast<string>(vars, "project_name")), 
-    output_name(Crails::cast<string>(vars, "output_name",  "application")), 
-    rpath(Crails::cast<string>(vars, "rpath",  "/usr/local/lib/genericjs")), 
-    generated_files_dir(Crails::cast<string>(vars, "generated_files_dir",  "lib")), 
-    external_sources(reinterpret_cast<vector<string>&>(*Crails::cast<vector<string>*>(vars, "external_sources")))
+    project_name(Crails::cast< string >(vars, "project_name")), 
+    output_name(Crails::cast< string >(vars, "output_name",  "application")), 
+    rpath(Crails::cast< string >(vars, "rpath",  "/usr/local/lib/genericjs")), 
+    generated_files_dir(Crails::cast< string >(vars, "generated_files_dir",  "lib")), 
+    external_sources(reinterpret_cast<vector<string>&>(*Crails::cast< vector<string>* >(vars, "external_sources")))
   {}
 
   void render()

@@ -10,9 +10,9 @@ class render_ScaffoldModelCpp : public Crails::Template
 public:
   render_ScaffoldModelCpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
-    filename(Crails::cast<string>(vars, "filename")), 
-    classname(Crails::cast<string>(vars, "classname")), 
-    properties(Crails::cast<map<string, string>>(vars, "properties"))
+    filename(Crails::cast< string >(vars, "filename")), 
+    classname(Crails::cast< string >(vars, "classname")), 
+    properties(Crails::cast< map<string, string> >(vars, "properties"))
   {}
 
   void render()

@@ -3,6 +3,8 @@
 #include "crails/shared_vars.hpp"
 #include "crails/template.hpp"
 #include <algorithm>
+#include <vector>
+#include <map>
 using namespace std;
 
 class render_ScaffoldModelHpp : public Crails::Template
@@ -10,8 +12,8 @@ class render_ScaffoldModelHpp : public Crails::Template
 public:
   render_ScaffoldModelHpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
-    classname(Crails::cast<string>(vars, "classname")), 
-    properties(Crails::cast<map<string, string>>(vars, "properties")), 
+    classname(Crails::cast< string >(vars, "classname")), 
+    properties(Crails::cast< map<string, string> >(vars, "properties")), 
     scalar_types( {"bool","char","unsigned char","char16_t","char32_t","wchar_t","signed char","int","unsigned int","short","unsigned short","long","long long","unsigned long","unsigned long long","double","long double","float","std::size_t","std::time_t"})
   {}
 

@@ -9,9 +9,9 @@ class render_ScaffoldLayoutHpp : public Crails::Template
 public:
   render_ScaffoldLayoutHpp(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
-    classname(Crails::cast<string>(vars, "classname")), 
-    element(Crails::cast<string>(vars, "element")), 
-    include(Crails::cast<string>(vars, "include"))
+    classname(Crails::cast< string >(vars, "classname")), 
+    element(Crails::cast< string >(vars, "element")), 
+    include(Crails::cast< string >(vars, "include"))
   {}
 
   void render()

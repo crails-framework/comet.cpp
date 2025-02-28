@@ -10,7 +10,7 @@ class render_ScaffoldViewHtml : public Crails::Template
 public:
   render_ScaffoldViewHtml(const Crails::Renderer& renderer, Crails::RenderTarget& target, Crails::SharedVars& vars) :
     Crails::Template(renderer, target, vars), 
-    properties(reinterpret_cast<map<string,string>&>(*Crails::cast<map<string,string>*>(vars, "properties")))
+    properties(reinterpret_cast<map<string,string>&>(*Crails::cast< map<string,string>* >(vars, "properties")))
   {}
 
   void render()
