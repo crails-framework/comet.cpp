@@ -95,7 +95,7 @@ static void dom_text_generator(stringstream& stream, const pugi::xml_node& node,
 {
   string text = node.text().as_string();
 
-  stream << endl << indent(depth) << "Comet::Element(\"span\").text(" << boost::json::serialize(text) << ')';
+  stream << endl << indent(depth) << "Comet::Element(\"span\").html(" << boost::json::serialize(text) << ')';
 }
 
 static shared_ptr<Class> get_subobject_for(Class& object, const pugi::xml_node& child)
