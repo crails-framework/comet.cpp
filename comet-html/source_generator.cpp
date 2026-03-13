@@ -128,6 +128,19 @@ static void generate_element_initializers(stringstream& stream, Class& object)
   }
 }
 
+static bool is_boolean_html_attribute(const string& attribute_name)
+{
+  static const vector<string> attributes{
+    "disabled", "multiple", "readonly", "required",
+    "autofocus", "autoplay", "controls", "loop",
+    "muted", "default", "defer", "async", "novalidate",
+    "formnovalidate", "open", "reversed", "inert", "ismap",
+    "allowfullscreen", "playsinline",
+    "content-editable", "draggable", "spellcheck", "translate", "autocomplete"
+  };
+  return find(attributes.begin(), attributes.end(), attribute_name) != attributes.end();
+}
+
 static void generate_binding_initializers(stringstream& stream, Class& object)
 {
   for (const auto& binding : object.get_bindings())
@@ -153,6 +166,8 @@ static void generate_binding_initializers(stringstream& stream, Class& object)
       stream << "[this]() { " << reference->get_name() << ".text(" << binding->get_code() << "); }";
     else if (binding->get_attribute_name() == "innerhtml")
       stream << "[this]() { " << reference->get_name() << ".html(" << binding->get_code() << "); }";
+    else if (is_boolean_html_attribute(binding->get_attribute_name()))
+      stream << "[this]() { " << reference->get_name() << ".toggle_boolean_attribute(\"" << binding->get_attribute_name() << "\", " << binding->get_code() << "); }";
     else
       stream << reference->get_name() << ", \"" << binding->get_attribute_name() << "\", [this]() { return Comet::lexical_cast<std::string>(" << binding->get_code() << "); }";
     stream << ')' << binding->get_bind_mode()
