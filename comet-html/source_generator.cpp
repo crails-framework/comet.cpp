@@ -263,6 +263,7 @@ static void generate_constructor(stringstream& stream, Class& object)
   generate_binding_initializers(stream, object);
   generate_repeater_initializers(stream, object);
   generate_event_listener_initializers(stream, object);
+  object.get_element().remove_attribute("tag-name");
   generate_dom_constructor(stream, object);
   generate_anchor_initializers(stream, object);
   stream << '}' << endl << endl;
