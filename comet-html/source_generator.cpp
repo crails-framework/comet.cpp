@@ -164,7 +164,7 @@ static void generate_binding_initializers(stringstream& stream, Class& object)
       stream << "[this]() { " << reference->get_name() << ".visible(" << binding->get_code() << "); }";
     else if (binding->get_attribute_name() == "text")
       stream << "[this]() { " << reference->get_name() << ".text(" << binding->get_code() << "); }";
-    else if (binding->get_attribute_name() == "innerhtml")
+    else if (binding->get_attribute_name() == "innerhtml" || binding->get_attribute_name() == "innerHTML")
       stream << "[this]() { " << reference->get_name() << ".html(" << binding->get_code() << "); }";
     else if (is_boolean_html_attribute(binding->get_attribute_name()))
       stream << "[this]() { " << reference->get_name() << ".toggle_boolean_attribute(\"" << binding->get_attribute_name() << "\", " << binding->get_code() << "); }";
