@@ -133,9 +133,10 @@ static void generate_getter_setters(stringstream& stream, const Class& object)
     if (reference->has_setter())
     {
       if (is_ptr)
-        stream << indent << "  virtual void set_" << reference->get_name() << '(' << reference->get_type() << " __v) { " << reference->get_name() << " = __v; }" << endl;
+        stream << indent << "  virtual void set_" << reference->get_name() << '(' << reference->get_type() << " __v) { " << reference->get_name() << " = __v;";
       else
-        stream << indent << "  virtual void set_" << reference->get_name() << "(const " << reference->get_type() << "& __v) { " << reference->get_name() << " = __v; }" << endl;
+        stream << indent << "  virtual void set_" << reference->get_name() << "(const " << reference->get_type() << "& __v) { " << reference->get_name() << " = __v;";
+      stream << " signaler.trigger(\"" << reference->get_name() << "-changed\"); }" << endl;
     }
   }
 }
