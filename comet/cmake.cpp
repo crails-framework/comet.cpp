@@ -2,6 +2,7 @@
 #include <boost/process.hpp>
 #include <crails/cli/cmake_builder.hpp>
 #include <crails/cli/build2_builder.hpp>
+#include <crails/cli/process.hpp>
 #include <crails/utils/split.hpp>
 #include "project_configuration.hpp"
 #include <iostream>
@@ -33,18 +34,15 @@ bool comet_cmake_builder(const ProjectConfiguration& configuration, bool verbose
 
 std::string get_cheerp_clang_version(const std::string& path)
 {
-  boost::process::ipstream stream;
-  boost::process::child process(path + " --version");
-  std::string line;
-  std::vector<std::string> parts;
+  Crails::ExecutableCommand command({path, {"--version"}});
+  std::string output;
 
-  process.wait();
-  if (process.exit_code() == 0)
+  if (Crails::run_command(command, output))
   {
-    getline(stream, line);
-    parts = Crails::split<std::string, std::vector<std::string>>(line, ' ');
-    if (parts.size() > 4)
-      return parts[4];
+    std::vector<std::string_view> lines = Crails::split<std::string_view, std::vector<std::string_view>>(std::string_view(output), '\n');
+    std::vector<std::string_view> parts = Crails::split<std::string_view, std::vector<std::string_view>>(lines[0], ' ');
+    if (parts.size() > 2)
+      return std::string(parts[2]);
     else
       std::cerr << "Could not retrieve cheerp's clang++ version." << std::endl;
   }
