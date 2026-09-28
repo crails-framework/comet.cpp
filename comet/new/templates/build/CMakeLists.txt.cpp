@@ -1,4 +1,4 @@
-#include <sstream>
+#include <crails/template_stream.hpp>
 #include "crails/render_target.hpp"
 #include "crails/shared_vars.hpp"
 #include "crails/template.hpp"
@@ -19,6 +19,8 @@ public:
 
   void render()
   {
+    ecpp_stream.reserve(2488);
+    // BEGIN TEMPLATE BODY
 ecpp_stream << "# runs with the following option:\n# -DCMAKE_TOOLCHAIN_FILE \"$CHEERP_PATH/share/cmake/Modules/CheerpToolchain.cmake\"\n\ncmake_minimum_required(VERSION 3.5)\n\nproject(" << ( project_name );
   ecpp_stream << ")\ninclude_directories(/usr/local/include . " << ( generated_files_dir );
   ecpp_stream << ")\nlink_directories(/usr/local/lib/genericjs /usr/lib/genericjs)\n\nset(CMAKE_CXX_FLAGS \"-target cheerp-genericjs -fexceptions -D__CHEERP_CLIENT__ -D__COMET_CLIENT__\")\nset(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} -Wall -Wno-unknown-pragmas -pedantic\")\n\nif (CMAKE_BUILD_TYPE EQUAL \"Debug\")\n  set(CMAKE_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS} -cheerp-sourcemap=" << ( output_name );
@@ -32,12 +34,12 @@ ecpp_stream << "# runs with the following option:\n# -DCMAKE_TOOLCHAIN_FILE \"$C
   ecpp_stream << "/*.cxx\n)\n\nadd_executable(" << ( output_name );
   ecpp_stream << " ${app_src})\n\ntarget_link_libraries(" << ( output_name );
   ecpp_stream << ".js\n  crails-semantics\n  comet\n)\n";
-    std::string _out_buffer = ecpp_stream.str();
-    _out_buffer = this->apply_post_render_filters(_out_buffer);
-    this->target.set_body(_out_buffer);
+    // END TEMPLATE BODY
+    std::string _out_buffer = std::move(ecpp_stream).extract();
+    this->target.set_body(this->apply_post_render_filters(std::move(_out_buffer)));
   }
 private:
-  std::stringstream ecpp_stream;
+  Crails::TemplateStream ecpp_stream;
   string project_name;
   string output_name;
   string rpath;

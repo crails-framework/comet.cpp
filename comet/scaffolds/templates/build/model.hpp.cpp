@@ -1,4 +1,4 @@
-#include <sstream>
+#include <crails/template_stream.hpp>
 #include "crails/render_target.hpp"
 #include "crails/shared_vars.hpp"
 #include "crails/template.hpp"
@@ -19,6 +19,8 @@ public:
 
   void render()
   {
+    ecpp_stream.reserve(3726);
+    // BEGIN TEMPLATE BODY
 ecpp_stream << "#pragma once\n#include <crails/mvc/model.hpp>\n\nclass " << ( classname );
   ecpp_stream << " : public Comet::JsonModel\n{\npublic:\n  std::string get_url() const override;\n  std::string to_json() const override;\n  void from_json(Data) override;\n";
  for (auto it = properties.begin() ; it != properties.end() ; ++it){
@@ -58,12 +60,12 @@ ecpp_stream << "#pragma once\n#include <crails/mvc/model.hpp>\n\nclass " << ( cl
   ecpp_stream << ";";
  };
   ecpp_stream << "\n};\n";
-    std::string _out_buffer = ecpp_stream.str();
-    _out_buffer = this->apply_post_render_filters(_out_buffer);
-    this->target.set_body(_out_buffer);
+    // END TEMPLATE BODY
+    std::string _out_buffer = std::move(ecpp_stream).extract();
+    this->target.set_body(this->apply_post_render_filters(std::move(_out_buffer)));
   }
 private:
-  std::stringstream ecpp_stream;
+  Crails::TemplateStream ecpp_stream;
   string classname;
   map<string, string> properties;
   vector<string> scalar_types;
